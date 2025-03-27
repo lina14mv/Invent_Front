@@ -1,11 +1,16 @@
+import { motion } from "framer-motion";
+
 const Somos = () => {
   return (
     <section>
       <h1 className="text-5xl text-center mt-20 px-40">
         Empoderamos tu negocio con tecnología sencilla y eficiente.
       </h1>
-      <section className="flex justify-center gap-10 mt-20 flex-wrap px-7">
-        <div className="flex flex-col bg-green-300 w-sm p-10 gap-5 rounded-4xl hover:border text-xl delay-150">
+      <section className="flex justify-center gap-20 mt-20 flex-wrap px-7">
+        <motion.div
+          className="flex flex-col bg-green-300 w-sm p-10 gap-5 rounded-4xl hover:border text-xl transition-all"
+          whileHover={{ scale: 1.3 }}
+        >
           <h1 className="text-center text-3xl font-semibold">Valores</h1>
           <p>
             En Invent++ nos enfocamos en la calidad y el servicio al cliente.
@@ -17,8 +22,11 @@ const Somos = () => {
             <li>Responsabilidad</li>
             <li>Respeto</li>
           </ul>
-        </div>
-        <div className="flex flex-col bg-green-300 w-sm p-10 gap-5 rounded-4xl hover:border text-xl delay-150">
+        </motion.div>
+        <motion.div
+          className="flex flex-col bg-green-300 w-sm p-10 gap-5 rounded-4xl hover:border text-xl transition-all"
+          whileHover={{ scale: 1.3 }}
+        >
           <h1 className="text-center text-3xl font-semibold">Mision</h1>
           <p>
             Revolucionar la gestión de pequeños negocios con tecnología
@@ -27,8 +35,11 @@ const Somos = () => {
             complicaciones. Queremos que tu negocio crezca con herramientas
             accesibles, automatizadas y diseñadas para tu éxito.
           </p>
-        </div>
-        <div className="flex flex-col bg-green-300 w-sm p-10 gap-5 rounded-4xl hover:border text-xl delay-150">
+        </motion.div>
+        <motion.div
+          className="flex flex-col bg-green-300 w-sm p-10 gap-5 rounded-4xl hover:border text-xl delay-150"
+          whileHover={{ scale: 1.3 }}
+        >
           <h1 className="text-center text-3xl font-semibold">
             Porque elegirnos?
           </h1>
@@ -39,7 +50,7 @@ const Somos = () => {
             <li>Accesible desde cualquier lugar</li>
             <li>Crece con nosotros</li>
           </ul>
-        </div>
+        </motion.div>
       </section>
     </section>
   );

@@ -1,25 +1,17 @@
-import Card from "../../shared/Card";
+import { Producto, Card } from "../../shared/Card";
+import { motion } from "framer-motion";
 
 const Productos = () => {
   return (
     <section>
-      <h1 className="text-5xl text-center mt-10 px-40">Productos.</h1>
-      <p className="text-center mt-10 px-40 text-xl">
+      <h1 className="text-5xl text-center font-semibold mt-10 px-40">
+        Productos<span className="text-green-400"> !</span>
+      </h1>
+      <p className="text-center mt-8 px-40 text-2xl">
         Conoce nuestros productos y servicios.
       </p>
-      <section className="flex justify-center mt-8 pl-15">
-        <div className="grid grid-cols-2 grid-rows-3 gap-3 bg-gray-100 p-5 border rounded-2xl max-w-sm border-green-300">
-          <img
-            src="src\assets\react.svg"
-            alt="imagen"
-            className="row-span-3 w-full h-full"
-          />
-          <h2 className="text-3xl font-bold">Invent++</h2>
-          <p className="text-xl">Sistema de inventario para tu empresa.</p>
-        </div>
-      </section>
-      <section className="flex justify-center mt-8 pl-15">
-        <div className="flex flex-wrap justify-center gap-8 p-8">
+      <section className="flex justify-center p-20">
+        <div className="2xl:flex hidden">
           <Card
             image="/src/assets/dev.jpg"
             title="Diego Moreno"
@@ -28,6 +20,44 @@ const Productos = () => {
             LinkedIn="www.linkedin.com/in/diego-fernando-moreno-martinez-b2b168256"
             Github="www.linkedin.com/in/diego-fernando-moreno-martinez-b2b168256"
           />
+        </div>
+        <div className="flex-1 flex flex-wrap justify-center items-start gap-4">
+          <Producto
+            title="Invent++"
+            description="Sistema de inventario para tu empresa."
+            img="src\assets\react.svg"
+          />
+          <Producto
+            title="Invent++"
+            description="Sistema de inventario para tu empresa."
+            img="src\assets\react.svg"
+          />
+          <div className="w-98 flex justify-center mt-20 border-green-300">
+            <motion.div
+              animate={{
+                scale: [1, 2, 2, 1, 1],
+                rotate: [0, 0, 180, 180, 0],
+                borderRadius: ["0%", "0%", "50%", "50%", "0%"],
+              }}
+              transition={{
+                duration: 2,
+                ease: "easeInOut",
+                times: [0, 0.2, 0.5, 0.8, 1],
+                repeat: Infinity,
+                repeatDelay: 1,
+              }}
+              style={{
+                width: 100,
+                height: 100,
+                backgroundColor: "#BBF7D0",
+                borderRadius: 5,
+                borderColor: "#86EFAC",
+                borderWidth: 2,
+              }}
+            />
+          </div>
+        </div>
+        <div className="2xl:flex hidden">
           <Card
             image="https://via.placeholder.com/150"
             title="Lina Maria"
