@@ -1,4 +1,3 @@
-
 const A = (props) => {
     return(
         <a href={props.href} className="border rounded-full px-8 py-2 text-black bg-green-400 text-xl font-bold hover:bg-green-500 focus:animate-spin delay-150">
@@ -9,7 +8,7 @@ const A = (props) => {
 
 const Boton = (props) => {
     return(
-        <button className={`font-bold delay-150 text-3xl hover:font-extrabold hover:cursor-pointer ${props.className}`} onClick={props.onClick} navigateTo={props.navigateTo}>
+        <button className={`font-bold delay-150 text-3xl hover:font-extrabold hover:cursor-pointer ${props.className}`} onClick={props.onClick}>
             {props.children}
         </button>
     )
