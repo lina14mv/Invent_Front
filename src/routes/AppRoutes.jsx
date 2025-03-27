@@ -4,6 +4,7 @@ import Inicio from "../features/landing/Inicio";
 import Somos from "../features/landing/Somos";
 import Contactanos from "../features/landing/Contactanos";
 import Productos from "../features/landing/Productos";
+import Auth from "../pages/authPage";
 
 const AppRoutes = () => {
     return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
                 <Route path="/Somos?" element={<LandingPage Content={Somos} />} />
                 <Route path="/Contactanos" element={<LandingPage Content={Contactanos} />} />
                 <Route path="/Productos" element={<LandingPage Content={Productos} />} />
+                <Route path="/auth" element={<Auth />} />
                 {/* <Route path="/nav" element={<Navbar />} /> */}
             </Routes>
         </Router>
