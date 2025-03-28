@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 const Productos = () => {
   return (
     <section>
-      <h1 className="text-5xl text-center font-semibold mt-10 px-40">
+      <h1 className="text-6xl text-center font-semibold pt-10 px-40">
         Productos<span className="text-green-400"> !</span>
       </h1>
-      <p className="text-center mt-8 px-40 text-2xl">
+      <p className="text-center mt-8 px-40 text-3xl">
         Conoce nuestros productos y servicios.
       </p>
       <section className="flex justify-center p-20">
@@ -32,7 +32,7 @@ const Productos = () => {
             description="Sistema de inventario para tu empresa."
             img="src\assets\react.svg"
           />
-          <div className="w-98 flex justify-center mt-20 border-green-300">
+          {/* <div className="w-98 flex justify-center mt-20 border-green-300">
             <motion.div
               animate={{
                 scale: [1, 2, 2, 1, 1],
@@ -55,7 +55,7 @@ const Productos = () => {
                 borderWidth: 2,
               }}
             />
-          </div>
+          </div> */}
         </div>
         <div className="2xl:flex hidden">
           <Card

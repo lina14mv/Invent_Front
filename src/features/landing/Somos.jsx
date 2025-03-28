@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const Somos = () => {
   return (
     <section>
-      <h1 className="text-5xl text-center mt-20 px-40">
+      <h1 className="text-5xl text-center pt-20 px-40">
         Empoderamos tu negocio con tecnología sencilla y eficiente.
       </h1>
       <section className="flex justify-center gap-20 mt-20 flex-wrap px-7">

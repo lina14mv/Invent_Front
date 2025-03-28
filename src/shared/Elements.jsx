@@ -16,7 +16,7 @@ const Boton = (props) => {
 
 const Input = (props) => {
     return(
-        <input type={props.type} placeholder={props.placeholder} className={`w-80 border-b-2 border-green-600 ${props.className}`} />
+        <input type={props.type} placeholder={props.placeholder} className={`w-80 border-b-2 border-green-600 focus:border-2 ${props.className}`} />
     )
 };
 
