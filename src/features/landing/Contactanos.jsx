@@ -9,43 +9,43 @@ import {
 
 const Contactanos = () => {
   return (
-    <section className="flex xl:justify-evenly xl:flex-row flex-col xl:items-auto items-center w-screen">
-      <div className="flex justify-center flex-col text-center xl:mt-28 mt-15 max-w-3xl px-12 ">
-        <h1 className="xl:text-7xl text-5xl">
+    <section className="flex justify-evenly lg:flex-row flex-col items-center w-screen">
+      <div className="flex justify-center flex-col text-center lg:mt-18 mt-8 max-w-lg lg:px-12 px-8">
+        <h1 className="lg:text-3xl text-2xl font-semibold">
           Contactanos
           <FontAwesomeIcon
             icon={faArrowDown}
-            className="ml-3 border-b-6 text-green-600"
+            className="ml-3 border-b-6 text-green-600 text-3xl"
           />
         </h1>
-        <p className="xl:text-2xl text-xl mt-8">
-          Tienes alguna duda o sugerencia? Contactanos a través de los
+        <p className="lg:text-lg text-md mt-8 px-10">
+          ¿Tienes alguna duda o sugerencia? Contactanos a través de los
           siguientes medios.
         </p>
-        <form className="pt-14 flex flex-col gap-y-8 text-lg">
-          <div className="flex justify-between gap-x-5">
+        <form className="lg:pt-10 pt-6 flex flex-col lg:gap-y-8 gap-y-5 lg:text-md text-xs justify-center items-center">
+          <div className="flex md:flex-row flex-col justify-between gap-5">
             <Input type="text" placeholder="Nombre" />
             <Input type="email" placeholder="Correo" />
           </div>
-          <div className="flex justify-between gap-x-5">
+          <div className="flex md:flex-row flex-col justify-between gap-5">
             <Input type="text" placeholder="Asunto" />
             <Input type="tel" placeholder="Telefono" />
           </div>
           <div className="my-6">
             <Boton
               type="submit"
-              className="bg-green-400 text-2xl px-8 py-1 rounded-full"
+              className="bg-green-400 text-lg px-5 py-1 rounded-full hover:outline outline-green-400"
             >
               Enviar
             </Boton>
           </div>
         </form>
       </div>
-      <div className="flex flex-col lg:text-3xl text-xl items-start xl:pt-40 pt-20 p-20">
+      <div className="flex flex-col lg:text-xl text-md items-start lg:pt-25 pt-7 lg:p-20 p-10">
         <h1 className="">Envianos un correo electronico:</h1>
-        <p className="lg:text-5xl text-3xl font-bold mt-5 ">inventp24@gmail.com</p>
-        <h1 className="mt-10">Tambien puedes encontrarnos aqui:</h1>
-        <div className="flex justify-start gap-x-10 mt-5 text-6xl">
+        <p className="lg:text-3xl text-2xl font-bold lg:mt-5 mt-2">inventp24@gmail.com</p>
+        <h1 className="lg:mt-10 mt-6">Tambien puedes encontrarnos aqui:</h1>
+        <div className="flex justify-start gap-x-10 lg:mt-5 mt-2 text-6xl">
           <button
             onClick={() => window.open("https://wa.me/573002222222", "_blank")}
           >
