@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { Boton, Input } from "../../shared/Elements";
 import {
   faWhatsapp,
   faFacebook,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
+import Formulario from "./ContactanosAuth";
 
 const Contactanos = () => {
   return (
@@ -22,24 +22,7 @@ const Contactanos = () => {
           ¿Tienes alguna duda o sugerencia? Contactanos a través de los
           siguientes medios.
         </p>
-        <form className="lg:pt-10 pt-6 flex flex-col lg:gap-y-8 gap-y-5 lg:text-md text-xs justify-center items-center">
-          <div className="flex md:flex-row flex-col justify-between gap-5">
-            <Input type="text" placeholder="Nombre" />
-            <Input type="email" placeholder="Correo" />
-          </div>
-          <div className="flex md:flex-row flex-col justify-between gap-5">
-            <Input type="text" placeholder="Asunto" />
-            <Input type="tel" placeholder="Telefono" />
-          </div>
-          <div className="my-6">
-            <Boton
-              type="submit"
-              className="bg-green-400 text-lg px-5 py-1 rounded-full hover:outline outline-green-400"
-            >
-              Enviar
-            </Boton>
-          </div>
-        </form>
+        <Formulario />
       </div>
       <div className="flex flex-col lg:text-xl text-md items-start lg:pt-25 pt-7 lg:p-20 p-10">
         <h1 className="">Envianos un correo electronico:</h1>
