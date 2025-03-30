@@ -8,7 +8,7 @@ const A = (props) => {
 
 const Boton = (props) => {
     return(
-        <button className={`font-bold delay-150 text-2xl hover:font-extrabold hover:cursor-pointer ${props.className}`} onClick={props.onClick}>
+        <button type={props.type} className={`font-bold delay-150 text-2xl hover:font-extrabold hover:cursor-pointer ${props.className}`} onClick={props.onClick}>
             {props.children}
         </button>
     )
@@ -16,7 +16,7 @@ const Boton = (props) => {
 
 const Input = (props) => {
     return(
-        <input type={props.type} placeholder={props.placeholder} className={`w-64 h-7 border-b-2 border-green-600 focus:border-3 ${props.className}`} />
+        <input type={props.type} name={props.name} value={props.value} onChange={props.onChange} placeholder={props.placeholder} className={`w-64 h-7 border-b-2 border-green-600 focus:border-3 ${props.className}`} />
     )
 };
 
