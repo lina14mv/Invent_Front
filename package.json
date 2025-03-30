@@ -17,6 +17,7 @@
     "@mui/icons-material": "^6.4.8",
     "@tailwindcss/vite": "^4.0.14",
     "framer-motion": "^12.6.0",
+    "notiflix": "^3.2.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.0",
