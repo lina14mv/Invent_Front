@@ -1,5 +1,6 @@
 import { Boton, Input } from "../../shared/Elements";
 import { useState } from "react";
+import Notiflix from "notiflix";
 
 const Formulario = () => {
   const [formData, setFormData] = useState({
@@ -30,10 +31,10 @@ const Formulario = () => {
 
       const data = await response.json();
       console.log("Respuesta de la API:", data);
-      alert("Formulario enviado con éxito!");
+      Notiflix.Notify.success("Formulario enviado con éxito!");
     } catch (error) {
       console.error("Error:", error);
-      alert("Hubo un problema al enviar el formulario.");
+      Notiflix.Notify.failure("Error al enviar el formulario.");
     }
   };
 
