@@ -26,10 +26,7 @@ const Card = ({ image, title, subtitle, description, LinkedIn, Github }) => {
           />
         </button>
         <button onClick={() => window.open({ Github }, "_blank")}>
-          <FontAwesomeIcon
-            icon={faGithub}
-            className=" cursor-pointer"
-          />
+          <FontAwesomeIcon icon={faGithub} className=" cursor-pointer" />
         </button>
       </div>
     </motion.div>
@@ -39,12 +36,10 @@ const Card = ({ image, title, subtitle, description, LinkedIn, Github }) => {
 const Producto = (props) => {
   return (
     <div className="grid grid-cols-2 grid-rows-3 lg:gap-x-4 gap-x-2 bg-green-200 lg:p-5 p-2 border rounded-2xl lg:max-w-64 md:max-w-52 sm:max-w-44 max-w-40 lg:h-52 md:h-48 sm:h-44 h-40 border-green-300">
-      <h2 className="col-span-2 lg:text-3xl md:text-xl sm:text-lg text-md font-bold text-center">{props.title}</h2>
-      <img
-        src={props.img}
-        alt="imagen"
-        className="row-span-2 w-full h-full"
-      />
+      <h2 className="col-span-2 lg:text-3xl md:text-xl sm:text-lg text-md font-bold text-center">
+        {props.title}
+      </h2>
+      <img src={props.img} alt="imagen" className="row-span-2 w-full h-full" />
       <p className="lg:text-xl md:text-lg sm:text-md text-xs row-span-2">
         {props.description}
       </p>
@@ -52,4 +47,18 @@ const Producto = (props) => {
   );
 };
 
-export { Producto, Card };
+const CardInfo = (props) => {
+  return (
+    <div className="h-40 w-52 bg-gray-100 flex items-center">
+      <i className="flex justify-center w-1/3">
+        <FontAwesomeIcon icon={props.icon} className="text-4xl" />
+      </i>
+      <div className="flex flex-col">
+        <h1 className="text-2xl">{props.num}</h1>
+        <p>{props.description}</p>
+      </div>
+    </div>
+  );
+};
+
+export { Producto, Card, CardInfo };

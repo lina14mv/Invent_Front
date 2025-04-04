@@ -16,6 +16,7 @@ const IniciarSesion = ({ onSubmit, onPasswordRecovery }) => {
 
       if (response.status === 200) {
         localStorage.setItem('correo', email);
+        // localStorage.setItem('nombre', nombre);
         onSubmit();
       }
     } catch (err) {
