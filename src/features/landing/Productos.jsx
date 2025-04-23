@@ -6,12 +6,12 @@ const Productos = () => {
     <section className="flex justify-center px-6">
       <div className="lg:flex hidden items-center pt-20">
         <Card
-          image="/src/assets/dev.jpg"
+          image="https://res.cloudinary.com/deucbjygt/image/upload/v1745380675/Imagen_de_WhatsApp_2025-03-12_a_las_11.15.38_987c6d94_t24knt.jpg"
           title="Diego Moreno"
           subtitle="Frontend Developer"
           description="Apasionado por React y el diseño web."
           LinkedIn="www.linkedin.com/in/diego-fernando-moreno-martinez-b2b168256"
-          Github="www.linkedin.com/in/diego-fernando-moreno-martinez-b2b168256"
+          Github="https://github.com/Dieguit0000"
         />
       </div>
       <div className="flex-1 flex flex-col justify-center items-center">
@@ -36,12 +36,12 @@ const Productos = () => {
       </div>
       <div className="lg:flex hidden items-center pt-20">
         <Card
-          image="https://via.placeholder.com/150"
+          image="https://res.cloudinary.com/deucbjygt/image/upload/v1745380673/Imagen_de_WhatsApp_2025-02-25_a_las_08.23.30_f0d0ee8b_wvwvgy.jpg"
           title="Lina Maria"
           subtitle="FullStack Developer"
-          description="Apasionada por React y el diseño web."
-          LinkedIn="www.linkedin.com/in/diego-fernando-moreno-martinez-b2b168256"
-          Github="www.linkedin.com/in/diego-fernando-moreno-martinez-b2b168256"
+          description="Apasionada por el desarrollo y el aprendizaje constante."
+          LinkedIn="https://www.linkedin.com/in/lina-maria-m-0183a5127/"
+          Github="https://github.com/lina14mv6"
         />
       </div>
     </section>
