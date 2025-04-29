@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import Sidebar from "../features/Admin/Components/sidebar";
 import Inicio from "../features/Admin/Inicio";
 import Empresas from "../features/Admin/Empresas";
 import Usuarios from "../features/Admin/Usuarios";
@@ -7,13 +6,24 @@ import Operaciones from "../features/Admin/Operaciones";
 import Finanzas from "../features/Admin/Finanzas";
 import Soporte from "../features/Admin/Soporte";
 import Configuracion from "../features/Admin/Configuracion";
+import Sidebar from "../components/sidebar";
+import { useState } from "react";
 
 
 const ManegePage = () => {
+
+  const [ancho, setAncho] = useState("64");
+
+  const cambiarAncho = (ancho) => {
+    setAncho(ancho);
+  }
+
   return (
-    <section className="w-screen h-screen flex">
-      <Sidebar />
-      <div className="flex-1 w-full h-full p-7">
+    <section className="flex">
+      <div className={`w-${ancho}`}>
+        <Sidebar enviarAncho={cambiarAncho}/>
+      </div>
+      <div className="flex-1 h-full p-7">
         <Routes>
           <Route path="/" element={<Inicio />}/>
           <Route path="/empresas" element={<Empresas/>}/>

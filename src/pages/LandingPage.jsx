@@ -1,9 +1,9 @@
-import Navbar from "/src/features/landing/components/navbar";
 import { Route, Routes } from "react-router-dom";
 import Inicio from "../features/landing/Inicio";
 import Somos from "../features/landing/Somos";
 import Contactanos from "../features/landing/Contactanos";
 import Productos from "../features/landing/Productos";
+import Navbar from "../components/navbar";
 
 const LandingPage = () => {
   return (
