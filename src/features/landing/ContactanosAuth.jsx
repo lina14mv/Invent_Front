@@ -30,7 +30,6 @@ const Formulario = () => {
       });
 
       const data = await response.json();
-      console.log("Respuesta de la API:", data);
       Notiflix.Notify.success("Formulario enviado con éxito!");
     } catch (error) {
       console.error("Error:", error);

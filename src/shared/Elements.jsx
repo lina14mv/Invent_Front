@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 const A = (props) => {
@@ -39,11 +40,22 @@ const Input = (props) => {
 const Option = (props) => {
   return (
     <Link
-      to={props.href} // Usa "to" en lugar de "href"
+      to={props.href}
       onClick={props.onClick}
-      className={`py-3 text-md font-bold text-center border-b w-full cursor-pointer ${props.className}`}
+      className={`group block w-full py-3 border-b cursor-pointer transition-all duration-300 ${props.className}`}
     >
-      {props.children}
+      <div className="inline-flex items-center justify-center w-86 group-hover:w-full transition-all duration-300">
+        {/* Ícono que se mueve suavemente a la izquierda en hover */}
+        <FontAwesomeIcon
+          icon={props.icon}
+          className="text-black text-xl transition-all duration-300 group-hover:ml-2"
+        />
+
+        {/* Texto oculto por defecto, aparece en hover */}
+        <span className="overflow-hidden w-20 whitespace-nowrap opacity-0 group-hover:opacity-100 group-hover:ml-2 transition-all duration-300 font-semibold text-lg">
+          {props.children}
+        </span>
+      </div>
     </Link>
   );
 };
