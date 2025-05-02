@@ -16,7 +16,7 @@ const Inicio = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/consultaInicial")
+      .get("http://localhost:5002/api/consultaInicial")
       .then((response) => {
         console.log("Datos recibidos:", response.data);
         setData(response.data);
@@ -34,7 +34,7 @@ const Inicio = () => {
       <tr key={idx} className="odd:bg-white even:bg-gray-200">
         <td>{emp.nombre_negocio}</td>
         <td>{emp.activo ? "Activo" : "Inactivo"}</td>
-        <td>{emp.direccion}</td>
+        <td>{emp.ubicacion_ciudad}</td>
         <td>{emp.telefono}</td>
         <td>{emp.total_ventas_ultimo_mes}</td>
       </tr>
