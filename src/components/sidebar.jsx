@@ -74,7 +74,7 @@ const Sidebar = ({ enviarAncho }) => {
         </div>
       ) : (
         enviarAncho("14"),
-        <div className="flex flex-col w-14 bg-green-100 h-screen pt-10 fixed">
+        <div className="flex flex-col w-14 h-screen pt-10 fixed">
           <Boton onClick={() => setIsOpen(!isOpen)}>
             <FontAwesomeIcon icon={faBars} className="text-green-600 absolute right-4 top-8" />
           </Boton>
