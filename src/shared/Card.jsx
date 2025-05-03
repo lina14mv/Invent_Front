@@ -49,13 +49,13 @@ const Producto = (props) => {
 
 const CardInfo = (props) => {
   return (
-    <div className="h-40 w-52 bg-gray-100 flex items-center">
-      <i className="flex justify-center w-1/3">
-        <FontAwesomeIcon icon={props.icon} className="text-4xl" />
-      </i>
-      <div className="flex flex-col">
-        <h1 className="text-2xl">{props.num}</h1>
-        <p>{props.description}</p>
+    <div className="h-40 w-52 bg-white rounded-2xl shadow-md flex items-center px-4 py-3 gap-4">
+      <div className="flex items-center justify-center w-1/3">
+        <FontAwesomeIcon icon={props.icon} className="text-5xl text-gray-700" />
+      </div>
+      <div className="flex flex-col justify-center">
+        <h1 className="text-3xl font-bold text-gray-800">{props.num}</h1>
+        <p className="text-sm text-gray-500">{props.description}</p>
       </div>
     </div>
   );
