@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CardInfo } from "../../shared/Card";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faBuildingCircleCheck, faCircleUser, faLayerGroup, faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useMemo, useState, useRef } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -63,7 +63,7 @@ const Inicio = () => {
 
       <div className="flex px-6 justify-evenly py-8">
         <CardInfo
-          icon={faCircleUser}
+          icon={faBuildingCircleCheck}
           num={num_empresas}
           description="Empresas registradas"
         />
@@ -73,12 +73,12 @@ const Inicio = () => {
           description="Usuarios registrados"
         />
         <CardInfo
-          icon={faCircleUser}
+          icon={faLayerGroup}
           num={num_productos}
           description="Productos registrados"
         />
         <CardInfo
-          icon={faCircleUser}
+          icon={faCartShopping}
           num={num_ventas}
           description="Ventas registradas"
         />

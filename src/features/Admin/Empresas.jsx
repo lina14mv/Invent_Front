@@ -5,8 +5,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import Notiflix from "notiflix";
 
 const Empresas = () => {
+  const [modal, setModal] = useState(false);
+
   const [empresas, setEmpresas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,6 +17,21 @@ const Empresas = () => {
   const [ubicacionFiltro, setUbicacionFiltro] = useState("");
 
   const [busqueda, setBusqueda] = useState("");
+
+  const [formData, setFormData] = useState({
+    nombre: "",
+    nit: "",
+    ubicacion_ciudad: "",
+    ubicacion_departamento: "",
+    direccion: "",
+    telefono: "",
+    correo: "",
+    tipo_negocio: "empresa",
+    nombre_dueno: "",
+    cedula_dueno: "",
+  });
+  const [departamentos, setDepartamentos] = useState([]);
+  const [ciudades, setCiudades] = useState([]);
 
   useEffect(() => {
     axios
@@ -30,13 +48,56 @@ const Empresas = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const fetchDepartamentos = async () => {
+      try {
+        const response = await axios.get(
+          "https://www.datos.gov.co/resource/xdk5-pm3f.json?$select=departamento&$group=departamento"
+        );
+        const departamentosUnicos = response.data
+          .map((d) => d.departamento)
+          .sort();
+        setDepartamentos(departamentosUnicos);
+      } catch (error) {
+        console.error("Error al obtener departamentos:", error);
+      }
+    };
+
+    fetchDepartamentos();
+  }, []);
+
+  useEffect(() => {
+    if (!formData.ubicacion_departamento) return;
+
+    const fetchCiudades = async () => {
+      try {
+        const response = await axios.get(
+          `https://www.datos.gov.co/resource/xdk5-pm3f.json?departamento=${encodeURIComponent(
+            formData.ubicacion_departamento
+          )}`
+        );
+        const ciudadesUnicas = [
+          ...new Set(response.data.map((item) => item.municipio)),
+        ].sort();
+        setCiudades(ciudadesUnicas);
+      } catch (error) {
+        console.error("Error al obtener ciudades:", error);
+      }
+    };
+
+    fetchCiudades();
+  }, [formData.ubicacion_departamento]);
+
   const ubicaciones = useMemo(() => {
     const lista = empresas.map((emp) => emp.ubicacion_ciudad) ?? [];
     return Array.from(new Set(lista));
   }, [empresas]);
 
   const normalizar = (texto) =>
-    texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    texto
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
 
   const empresasFiltradas = useMemo(() => {
     let lista = empresas ?? [];
@@ -84,6 +145,52 @@ const Empresas = () => {
     );
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let form = {
+      nombre: formData.nombre,
+      nit: formData.nit,
+      direccion: formData.direccion,
+      telefono: formData.telefono,
+      correo: formData.correo,
+      ubicacion_ciudad: `${formData.ubicacion_ciudad}, ${formData.ubicacion_departamento}`,
+      tipo_negocio: "empresa",
+      nombre_dueno: formData.nombre_dueno,
+      cedula_dueno: formData.cedula_dueno,
+      creado_por: "1",
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5002/negocios/registrar",
+        form,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      Notiflix.Notify.success("Empresa registrada!");
+      setModal(false);
+      setFormData({
+        nombre: "",
+        nit: "",
+        ubicacion_ciudad: "",
+        ubicacion_departamento: "",
+        direccion: "",
+        telefono: "",
+        correo: "",
+        tipo_negocio: "empresa",
+        nombre_dueno: "",
+        cedula_dueno: "",
+      });
+    } catch (error) {
+      console.error(error);
+      Notiflix.Notify.failure("Error al registrar empresa!");
+    }
+  };
+
   return (
     <>
       <div className="flex justify-between">
@@ -109,38 +216,45 @@ const Empresas = () => {
           </i>
         </div>
       </div>
-      <div className="flex my-5 gap-3">
-        <select
-          className="bg-gray-100 border-gray-300 rounded-md"
-          value={estadoFiltro}
-          onChange={(e) => setEstadoFiltro(e.target.value)}
-        >
-          <option value="0">Estado</option>
-          <option value="1">Activo</option>
-          <option value="2">Inactivo</option>
-        </select>
-        <select
-          className="bg-gray-100 border-gray-300 rounded-md p-2"
-          value={ubicacionFiltro}
-          onChange={(e) => setUbicacionFiltro(e.target.value)}
-        >
-          <option value="">Ubicación</option>
-          {ubicaciones.map((ubi, idx) => (
-            <option key={idx} value={ubi}>
-              {ubi}
-            </option>
-          ))}
-        </select>
-
+      <div className="flex my-5 gap-3 justify-between">
+        <div className="flex my-5 gap-3 ">
+          <select
+            className="bg-gray-100 border-gray-300 rounded-md"
+            value={estadoFiltro}
+            onChange={(e) => setEstadoFiltro(e.target.value)}
+          >
+            <option value="0">Estado</option>
+            <option value="1">Activo</option>
+            <option value="2">Inactivo</option>
+          </select>
+          <select
+            className="bg-gray-100 border-gray-300 rounded-md p-2"
+            value={ubicacionFiltro}
+            onChange={(e) => setUbicacionFiltro(e.target.value)}
+          >
+            <option value="">Ubicación</option>
+            {ubicaciones.map((ubi, idx) => (
+              <option key={idx} value={ubi}>
+                {ubi}
+              </option>
+            ))}
+          </select>
+          <button
+            className="bg-red-500 rounded-md px-2 hover:cursor-pointer"
+            onClick={() => {
+              setEstadoFiltro("");
+              setUbicacionFiltro("");
+              setBusqueda("");
+            }}
+          >
+            Borrar filtros
+          </button>
+        </div>
         <button
-          className="bg-red-500 rounded-md px-2 hover:cursor-pointer"
-          onClick={() => {
-            setEstadoFiltro("");
-            setUbicacionFiltro("");
-            setBusqueda("");
-          }}
+          className="bg-green-500 rounded-md px-2 hover:cursor-pointer w-32 right-0 my-5"
+          onClick={() => setModal(true)}
         >
-          Borrar filtros
+          Nueva empresa
         </button>
       </div>
       <div className="mt-3">
@@ -170,6 +284,136 @@ const Empresas = () => {
             )}
           </tbody>
         </table>
+
+        {modal && (
+          <div className="fixed inset-0 flex justify-center items-center bg-black/75 z-50">
+            <div className="bg-white p-6 rounded-md shadow-lg w-96">
+              <h2 className="text-xl font-bold mb-4">
+                Registrar nueva empresa
+              </h2>
+              <form onSubmit={handleSubmit}>
+                <h3 className="text-base font-semibold mb-2">Datos empresa:</h3>
+                <input
+                  type="text"
+                  placeholder="Nombre"
+                  value={formData.nombre}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nombre: e.target.value })
+                  }
+                  className="mb-2 w-full border p-1"
+                />
+                <input
+                  type="number"
+                  placeholder="Nit"
+                  value={formData.nit}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nit: e.target.value })
+                  }
+                  className="mb-3 w-full border p-1"
+                />
+                <input
+                  type="number"
+                  placeholder="Telefono"
+                  value={formData.telefono}
+                  onChange={(e) =>
+                    setFormData({ ...formData, telefono: e.target.value })
+                  }
+                  className="mb-3 w-full border p-1"
+                />
+                <input
+                  type="text"
+                  placeholder="Correo"
+                  value={formData.correo}
+                  onChange={(e) =>
+                    setFormData({ ...formData, correo: e.target.value })
+                  }
+                  className="mb-3 w-full border p-1"
+                />
+                <select
+                  value={formData.ubicacion_departamento}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      ubicacion_departamento: e.target.value,
+                      ubicacion_ciudad: "",
+                    })
+                  }
+                  className="mb-3 w-full border p-2"
+                >
+                  <option value="">Selecciona un departamento</option>
+                  {departamentos.map((dep) => (
+                    <option key={dep} value={dep}>
+                      {dep}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={formData.ubicacion_ciudad}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      ubicacion_ciudad: e.target.value,
+                    })
+                  }
+                  className="mb-3 w-full border p-2"
+                  disabled={!formData.ubicacion_departamento}
+                >
+                  <option value="">Selecciona una ciudad</option>
+                  {ciudades.map((ciudad) => (
+                    <option key={ciudad} value={ciudad}>
+                      {ciudad}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  placeholder="Dirección"
+                  value={formData.direccion}
+                  onChange={(e) =>
+                    setFormData({ ...formData, direccion: e.target.value })
+                  }
+                  className="mb-3 w-full border p-1"
+                />
+                <h3 className="text-base font-semibold mb-2">
+                  Datos propietario:
+                </h3>
+                <input
+                  type="text"
+                  placeholder="Nombre"
+                  value={formData.nombre_dueno}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nombre_dueno: e.target.value })
+                  }
+                  className="mb-3 w-full border p-1"
+                />
+                <input
+                  type="number"
+                  placeholder="Cedula"
+                  value={formData.cedula_dueno}
+                  onChange={(e) =>
+                    setFormData({ ...formData, cedula_dueno: e.target.value })
+                  }
+                  className="mb-3 w-full border p-1"
+                />
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setModal(false)}
+                    className="bg-gray-300 px-3 py-1 rounded"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-green-500 text-white px-3 py-1 rounded hover:cursor-pointer"
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
