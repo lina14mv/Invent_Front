@@ -9,7 +9,7 @@ const IniciarSesion = ({ onSubmit, onPasswordRecovery }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const response = await axios.post('http://localhost:5002/api/login', {
         correo: email,
         contraseña: password,
       });

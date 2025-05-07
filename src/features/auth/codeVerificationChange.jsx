@@ -19,7 +19,7 @@ const CodeVerificationChange = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put('http://localhost:5000/api/verificar-codigo-cambio', {
+      const response = await axios.put('http://localhost:5002/api/verificar-codigo-cambio', {
         correo: email,
         tipo: tipo,
         codigo: code,

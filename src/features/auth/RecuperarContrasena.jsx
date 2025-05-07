@@ -10,7 +10,7 @@ const RecuperarContraseña = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/enviar-codigo', {
+      const response = await axios.post('http://localhost:5002/api/enviar-codigo', {
         correo: email,
         tipo: tipo,
       });

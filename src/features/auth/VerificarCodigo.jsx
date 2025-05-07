@@ -9,22 +9,23 @@ const VerificarCodigo = ({ onSubmit }) => {
     e.preventDefault();
     try {
       const correo = localStorage.getItem('correo');
-      const response = await axios.post('http://localhost:5000/api/validar-codigo', {
+      const response = await axios.post('http://localhost:5002/api/validar-codigo', {
         correo: correo,
         codigoSesion: code,
       });
 
       if (response.status === 200) {
-        const { token, tipo, debe_cambiar_contrasena } = response.data;
+        const { token, tipo, debe_cambiar_contrasena, id } = response.data;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('id', id);
 
         if (debe_cambiar_contrasena) {
           onSubmit('changePassword');
         } else if (tipo === 'administrador') {
-          window.location.href = '/admin/dashboard';
+          window.location.href = '/Manage';
         } else if (tipo === 'negocio') {
-          window.location.href = '/negocio/dashboard';
+          window.location.href = '/empresa';
         } else {
           window.location.href = '/usuario/dashboard';
         }
