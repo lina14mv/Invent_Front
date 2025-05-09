@@ -1,6 +1,9 @@
 import {
   faCircleUser,
   faMagnifyingGlass,
+  faPenToSquare,
+  faTrash,
+  faCirclePlay,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useState } from "react";
@@ -9,11 +12,12 @@ import Notiflix from "notiflix";
 
 const Empresas = () => {
   const [modal, setModal] = useState(false);
+  const [editingEmpresaId, setEditingEmpresaId] = useState(null);
 
   const [empresas, setEmpresas] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [estadoFiltro, setEstadoFiltro] = useState("");
+  const [estadoFiltro, setEstadoFiltro] = useState("1");
   const [ubicacionFiltro, setUbicacionFiltro] = useState("");
 
   const [busqueda, setBusqueda] = useState("");
@@ -133,6 +137,17 @@ const Empresas = () => {
         <td>{emp.cantidad_productos}</td>
         <td>{emp.cantidad_trabajadores}</td>
         <td>{emp.total_ventas_mes}</td>
+        <td className="flex justify-center items-center gap-3 h-10">
+          <button
+            onClick={() => handleEditEmpresa(emp)}
+            className="bg-blue-400 text-white px-2 rounded hover:bg-blue-600"
+          >
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </button>
+          <button onClick={() => {emp.activo ? handleDeleteEmpresa(emp.id_negocio) : handleActivarEmpresa(emp.id_negocio)}} className={emp.activo ? "bg-red-400 text-white px-2 rounded hover:bg-red-600" : "bg-green-400 text-white px-2 rounded hover:bg-green-600"}>
+            {emp.activo ? <FontAwesomeIcon icon={faTrash} /> : <FontAwesomeIcon icon={faCirclePlay} />}
+          </button>
+        </td>
       </tr>
     ));
   }, [empresasFiltradas]);
@@ -148,13 +163,15 @@ const Empresas = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let form = {
+    let ubicacion = `${formData.ubicacion_ciudad}, ${formData.ubicacion_departamento}`;
+
+    const form = {
       nombre: formData.nombre,
       nit: formData.nit,
       direccion: formData.direccion,
       telefono: formData.telefono,
       correo: formData.correo,
-      ubicacion_ciudad: `${formData.ubicacion_ciudad}, ${formData.ubicacion_departamento}`,
+      ubicacion_ciudad: ubicacion,
       tipo_negocio: "empresa",
       nombre_dueno: formData.nombre_dueno,
       cedula_dueno: formData.cedula_dueno,
@@ -162,34 +179,125 @@ const Empresas = () => {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:5002/negocios/registrar",
-        form,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      Notiflix.Notify.success("Empresa registrada!");
+      if (editingEmpresaId) {
+        await axios.put(
+          `http://localhost:5002/api/${editingEmpresaId}/editarE`,
+          form
+        );
+        Notiflix.Notify.success("Empresa actualizada!");
+      } else {
+        await axios.post("http://localhost:5002/negocios/registrar", form);
+        Notiflix.Notify.success("Empresa registrada!");
+      }
+
       setModal(false);
+      setEditingEmpresaId(null);
       setFormData({
         nombre: "",
         nit: "",
-        ubicacion_ciudad: "",
-        ubicacion_departamento: "",
         direccion: "",
         telefono: "",
         correo: "",
+        ubicacion_ciudad: "",
+        ubicacion_departamento: "",
         tipo_negocio: "empresa",
         nombre_dueno: "",
         cedula_dueno: "",
       });
+
+      const response = await axios.get("http://localhost:5002/api/negocios");
+      setEmpresas(response.data.negocios);
     } catch (error) {
       console.error(error);
-      Notiflix.Notify.failure("Error al registrar empresa!");
+      Notiflix.Notify.failure(
+        editingEmpresaId
+          ? "Error al actualizar empresa!"
+          : "Error al registrar empresa!"
+      );
     }
   };
+
+  const handleEditEmpresa = (empresa) => {
+
+    let empresaEdit = empresas.find((emp) => emp.nombre_negocio == empresa.nombre_negocio);
+    setEditingEmpresaId(empresaEdit.id_negocio);
+    console.log("empresaEdit ", empresaEdit);
+    let [ubicacion_ciudadEdit, ubicacion_departamentoEdit] = empresa.ubicacion_ciudad.split(", ").map((item) => item.trim());
+    setFormData({
+      nombre: empresaEdit.nombre_negocio,
+      nit: empresaEdit.nit,
+      direccion: empresaEdit.direccion,
+      telefono: empresaEdit.telefono,
+      correo: empresaEdit.correo,
+      ubicacion_ciudad: ubicacion_ciudadEdit,
+      ubicacion_departamento: ubicacion_departamentoEdit,
+      tipo_negocio: empresaEdit.tipo_negocio,
+      nombre_dueno: empresaEdit.nombre_dueno,
+      cedula_dueno: empresaEdit.cedula_dueno,
+    }); 
+    setModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setModal(false);
+    setEditingEmpresaId(null);
+    setFormData({
+      nombre: "",
+      nit: "",
+      direccion: "",
+      telefono: "",
+      correo: "",
+      ubicacion_ciudad: "",
+      ubicacion_departamento: "",
+      tipo_negocio: "empresa",
+      nombre_dueno: "",
+      cedula_dueno: "",
+    });
+  };
+
+  const handleDeleteEmpresa = (empresa) => {
+    Notiflix.Confirm.show(
+      "Eliminar empresa",
+      "¿Estás seguro de que deseas eliminar esta empresa?",
+      "Sí",
+      "No",
+      async () => {
+        try {
+          await axios.put(`http://localhost:5002/api/${empresa}/desactivarN`);
+          Notiflix.Notify.success("Empresa eliminada!");
+          const response = await axios.get("http://localhost:5002/api/negocios");
+          setEmpresas(response.data.negocios);
+        } catch (error) {
+          console.error(error);
+          Notiflix.Notify.failure("Error al eliminar empresa!");
+        }
+      },
+      () => {},
+      { width: "320px", borderRadius: "8px" }
+    );
+  }
+
+  const handleActivarEmpresa = (empresa) => {
+    Notiflix.Confirm.show(
+      "Activar empresa",
+      "¿Estás seguro de que deseas activar esta empresa?",
+      "Sí",
+      "No",
+      async () => {
+        try {
+          await axios.put(`http://localhost:5002/api/${empresa}/activarN`);
+          Notiflix.Notify.success("Empresa activada!");
+          const response = await axios.get("http://localhost:5002/api/negocios");
+          setEmpresas(response.data.negocios);
+        } catch (error) {
+          console.error(error);
+          Notiflix.Notify.failure("Error al activar empresa!");
+        }
+      },
+      () => {},
+      { width: "320px", borderRadius: "8px" }
+    );
+  }
 
   return (
     <>
@@ -270,6 +378,7 @@ const Empresas = () => {
               <th className="">#Productos</th>
               <th className="">#Trabajadores</th>
               <th className="">Ventas/mes</th>
+              <th className="">Acciones</th>
             </tr>
           </thead>
           <tbody className="bg-gray-100">
@@ -277,7 +386,7 @@ const Empresas = () => {
               rows
             ) : (
               <tr>
-                <td colSpan="5" className="py-4 text-center text-gray-500">
+                <td colSpan="9" className="py-4 text-center text-gray-500">
                   No hay datos para mostrar
                 </td>
               </tr>
@@ -289,8 +398,11 @@ const Empresas = () => {
           <div className="fixed inset-0 flex justify-center items-center bg-black/75 z-50">
             <div className="bg-white p-6 rounded-md shadow-lg w-96">
               <h2 className="text-xl font-bold mb-4">
-                Registrar nueva empresa
+                {editingEmpresaId
+                  ? "Editar empresa"
+                  : "Registrar nueva empresa"}
               </h2>
+
               <form onSubmit={handleSubmit}>
                 <h3 className="text-base font-semibold mb-2">Datos empresa:</h3>
                 <input
@@ -302,15 +414,17 @@ const Empresas = () => {
                   }
                   className="mb-2 w-full border p-1"
                 />
-                <input
-                  type="number"
-                  placeholder="Nit"
-                  value={formData.nit}
-                  onChange={(e) =>
-                    setFormData({ ...formData, nit: e.target.value })
-                  }
-                  className="mb-3 w-full border p-1"
-                />
+                {editingEmpresaId ? " " : (
+                  <input
+                    type="number"
+                    placeholder="Nit"
+                    value={formData.nit}
+                    onChange={(e) =>
+                      setFormData({ ...formData, nit: e.target.value })
+                    }
+                    className="mb-3 w-full border p-1"
+                  />
+                )}
                 <input
                   type="number"
                   placeholder="Telefono"
@@ -398,7 +512,7 @@ const Empresas = () => {
                 <div className="flex justify-end gap-2">
                   <button
                     type="button"
-                    onClick={() => setModal(false)}
+                    onClick={() => handleCloseModal()}
                     className="bg-gray-300 px-3 py-1 rounded"
                   >
                     Cancelar
