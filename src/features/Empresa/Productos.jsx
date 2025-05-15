@@ -3,52 +3,121 @@ import axios from "axios";
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
-  const [filtroCategoria, setFiltroCategoria] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
   const [nuevoProducto, setNuevoProducto] = useState({
     nombre: "",
     descripcion: "",
-    categoria: "",
-    precio: "",
-    estado: "disponible",
+    precio_compra: "",
+    precio_venta: "",
+    stock: "",
+    imagen_url: "",
   });
+  const [imagen, setImagen] = useState(null);
+  const [subiendoImagen, setSubiendoImagen] = useState(false);
 
   useEffect(() => {
-    // Simulación de datos de ejemplo
     const fetchProductos = async () => {
+      const id_negocio = localStorage.getItem("id"); // Obtener el ID del negocio desde el localStorage
+      if (!id_negocio) {
+        console.error("No se encontró el ID del negocio en el localStorage.");
+        return;
+      }
+
       try {
-        const response = await axios.get("http://localhost:5002/api/productos");
-        setProductos(response.data);
+        const response = await axios.get(
+          'http://localhost:5002/api/productos/1',
+          //`http://localhost:5002/api/productos/${id_negocio}` // Usar el ID en la ruta
+        );
+
+        // Extraer el array de productos de la respuesta
+        if (response.data && Array.isArray(response.data.productos)) {
+          setProductos(response.data.productos);
+        } else {
+          console.error("La respuesta de la API no contiene un array de productos:", response.data);
+          setProductos([]);
+        }
       } catch (err) {
         console.error("Error al cargar los productos:", err);
+        setProductos([]);
       }
     };
 
     fetchProductos();
   }, []);
 
-  const handleAgregarProducto = () => {
-    // Simulación de agregar producto
-    setProductos([...productos, { ...nuevoProducto, id: productos.length + 1 }]);
-    setMostrarModal(false);
-    setNuevoProducto({
-      nombre: "",
-      descripcion: "",
-      categoria: "",
-      precio: "",
-      estado: "disponible",
-    });
+  const subirImagenACloudinary = async () => {
+    if (!imagen) return null;
+
+    const formData = new FormData();
+    formData.append("file", imagen);
+    formData.append("upload_preset", "invent++"); // Reemplaza con tu upload preset de Cloudinary
+
+    try {
+      setSubiendoImagen(true);
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/deucbjygt/image/upload", // Reemplaza con tu URL de Cloudinary
+        formData
+      );
+      setSubiendoImagen(false);
+      return response.data.secure_url;
+    } catch (error) {
+      setSubiendoImagen(false);
+      console.error("Error al subir la imagen a Cloudinary:", error);
+      return null;
+    }
+  };
+
+  const handleAgregarProducto = async () => {
+    const id_negocio = localStorage.getItem("id"); // Obtener el ID del negocio desde el localStorage
+    if (!id_negocio) {
+      alert("No se encontró el ID del negocio en el localStorage.");
+      return;
+    }
+
+    const imagenUrl = await subirImagenACloudinary();
+    if (!imagenUrl) {
+      alert("Error al subir la imagen. Intenta nuevamente.");
+      return;
+    }
+
+    const productoData = {
+      ...nuevoProducto,
+      id_negocio: parseInt(id_negocio),
+      imagen_url: imagenUrl,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5002/api/registrarProductos",
+        productoData
+      );
+      if (response.status === 201) {
+        // Actualizar la lista de productos con el nuevo producto
+        setProductos([...productos, response.data]);
+        setMostrarModal(false);
+        setNuevoProducto({
+          nombre: "",
+          descripcion: "",
+          precio_compra: "",
+          precio_venta: "",
+          stock: "",
+          imagen_url: "",
+        });
+        setImagen(null);
+        alert("Producto registrado exitosamente.");
+      }
+    } catch (err) {
+      console.error("Error al registrar el producto:", err);
+      alert("Ocurrió un error al registrar el producto.");
+    }
   };
 
   const productosFiltrados = productos.filter((producto) => {
-    const cumpleCategoria = filtroCategoria
-      ? producto.categoria === filtroCategoria
-      : true;
     const cumpleEstado = filtroEstado
-      ? producto.estado === filtroEstado
+      ? producto.disponibilidad === filtroEstado
       : true;
-    return cumpleCategoria && cumpleEstado;
+    return cumpleEstado;
   });
 
   return (
@@ -67,27 +136,16 @@ const Productos = () => {
       <div className="flex gap-4 mb-5">
         <select
           className="bg-gray-100 border-gray-300 rounded-md p-2"
-          value={filtroCategoria}
-          onChange={(e) => setFiltroCategoria(e.target.value)}
-        >
-          <option value="">Todas las categorías</option>
-          <option value="alimentos">Alimentos</option>
-          <option value="bebidas">Bebidas</option>
-          <option value="ropa">Ropa</option>
-        </select>
-        <select
-          className="bg-gray-100 border-gray-300 rounded-md p-2"
           value={filtroEstado}
           onChange={(e) => setFiltroEstado(e.target.value)}
         >
           <option value="">Todos los estados</option>
-          <option value="disponible">Disponible</option>
-          <option value="no disponible">No disponible</option>
+          <option value="Disponible">Disponible</option>
+          <option value="No disponible">No disponible</option>
         </select>
         <button
           className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-400"
           onClick={() => {
-            setFiltroCategoria("");
             setFiltroEstado("");
           }}
         >
@@ -101,20 +159,24 @@ const Productos = () => {
           <tr className="bg-gray-200">
             <th className="border border-gray-300 px-4 py-2">Nombre</th>
             <th className="border border-gray-300 px-4 py-2">Descripción</th>
-            <th className="border border-gray-300 px-4 py-2">Categoría</th>
-            <th className="border border-gray-300 px-4 py-2">Precio</th>
-            <th className="border border-gray-300 px-4 py-2">Estado</th>
+            <th className="border border-gray-300 px-4 py-2">Precio Compra</th>
+            <th className="border border-gray-300 px-4 py-2">Precio Venta</th>
+            <th className="border border-gray-300 px-4 py-2">Stock</th>
+            <th className="border border-gray-300 px-4 py-2">Disponibilidad</th>
+            <th className="border border-gray-300 px-4 py-2">Imagen</th>
           </tr>
         </thead>
         <tbody>
           {productosFiltrados.map((producto) => (
-            <tr key={producto.id} className="odd:bg-white even:bg-gray-100">
+            <tr key={producto.id_producto} className="odd:bg-white even:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{producto.nombre}</td>
               <td className="border border-gray-300 px-4 py-2">{producto.descripcion}</td>
-              <td className="border border-gray-300 px-4 py-2">{producto.categoria}</td>
-              <td className="border border-gray-300 px-4 py-2">${producto.precio}</td>
-              <td className="border border-gray-300 px-4 py-2 capitalize">
-                {producto.estado}
+              <td className="border border-gray-300 px-4 py-2">${producto.precio_compra}</td>
+              <td className="border border-gray-300 px-4 py-2">${producto.precio_venta}</td>
+              <td className="border border-gray-300 px-4 py-2">{producto.stock}</td>
+              <td className="border border-gray-300 px-4 py-2">{producto.disponibilidad}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                <img src={producto.imagen} alt={producto.nombre} className="w-16 h-16 object-cover" />
               </td>
             </tr>
           ))}
@@ -148,39 +210,45 @@ const Productos = () => {
               ></textarea>
             </div>
             <div className="mb-4">
-              <label className="block font-semibold mb-2">Categoría</label>
-              <input
-                type="text"
-                value={nuevoProducto.categoria}
-                onChange={(e) =>
-                  setNuevoProducto({ ...nuevoProducto, categoria: e.target.value })
-                }
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-2">Precio</label>
+              <label className="block font-semibold mb-2">Precio Compra</label>
               <input
                 type="number"
-                value={nuevoProducto.precio}
+                value={nuevoProducto.precio_compra}
                 onChange={(e) =>
-                  setNuevoProducto({ ...nuevoProducto, precio: e.target.value })
+                  setNuevoProducto({ ...nuevoProducto, precio_compra: e.target.value })
                 }
                 className="w-full p-2 border rounded-md"
               />
             </div>
             <div className="mb-4">
-              <label className="block font-semibold mb-2">Estado</label>
-              <select
-                value={nuevoProducto.estado}
+              <label className="block font-semibold mb-2">Precio Venta</label>
+              <input
+                type="number"
+                value={nuevoProducto.precio_venta}
                 onChange={(e) =>
-                  setNuevoProducto({ ...nuevoProducto, estado: e.target.value })
+                  setNuevoProducto({ ...nuevoProducto, precio_venta: e.target.value })
                 }
                 className="w-full p-2 border rounded-md"
-              >
-                <option value="disponible">Disponible</option>
-                <option value="no disponible">No disponible</option>
-              </select>
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block font-semibold mb-2">Stock</label>
+              <input
+                type="number"
+                value={nuevoProducto.stock}
+                onChange={(e) =>
+                  setNuevoProducto({ ...nuevoProducto, stock: e.target.value })
+                }
+                className="w-full p-2 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block font-semibold mb-2">Imagen</label>
+              <input
+                type="file"
+                onChange={(e) => setImagen(e.target.files[0])}
+                className="w-full p-2 border rounded-md"
+              />
             </div>
             <div className="flex justify-end gap-4">
               <button
@@ -192,8 +260,9 @@ const Productos = () => {
               <button
                 className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500"
                 onClick={handleAgregarProducto}
+                disabled={subiendoImagen}
               >
-                Guardar
+                {subiendoImagen ? "Subiendo..." : "Guardar"}
               </button>
             </div>
           </div>

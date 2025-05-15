@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -18,6 +20,7 @@
     "@tailwindcss/vite": "^4.0.14",
     "axios": "^1.8.4",
     "chart.js": "^4.4.9",
+    "cloudinary": "^2.6.1",
     "framer-motion": "^12.6.0",
     "notiflix": "^3.2.8",
     "react": "^19.0.0",

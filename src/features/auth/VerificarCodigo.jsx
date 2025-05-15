@@ -15,10 +15,11 @@ const VerificarCodigo = ({ onSubmit }) => {
       });
 
       if (response.status === 200) {
-        const { token, tipo, debe_cambiar_contrasena, id } = response.data;
+        const { token, tipo, debe_cambiar_contrasena, id, rol} = response.data;
 
         localStorage.setItem('token', token);
         localStorage.setItem('id', id);
+        localStorage.setItem('rol', rol);
 
         if (debe_cambiar_contrasena) {
           onSubmit('changePassword');

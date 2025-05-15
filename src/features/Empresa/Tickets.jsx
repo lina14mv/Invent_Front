@@ -11,13 +11,30 @@ const Tickets = () => {
   });
 
   useEffect(() => {
-    // Simulación de datos de ejemplo
     const fetchTickets = async () => {
+      //const id_negocio = 4; // ID de negocio de ejemplo
+      const id_negocio = localStorage.getItem("id"); // Obtener el ID del negocio desde el localStorage
+      if (!id_negocio) {
+        console.error("No se encontró el ID del negocio en el localStorage.");
+        return;
+      }
+
       try {
-        const response = await axios.get("http://localhost:5002/api/tickets");
-        setTickets(response.data);
+        const response = await axios.get("http://localhost:5002/api/ver-tickets");
+
+        // Filtrar los tickets por el id_negocio
+        if (response.data && Array.isArray(response.data.tickets)) {
+          const ticketsFiltrados = response.data.tickets.filter(
+            (ticket) => ticket.id_negocio === parseInt(id_negocio)
+          );
+          setTickets(ticketsFiltrados);
+        } else {
+          console.error("La respuesta de la API no contiene un array de tickets:", response.data);
+          setTickets([]);
+        }
       } catch (err) {
         console.error("Error al cargar los tickets:", err);
+        setTickets([]);
       }
     };
 
@@ -25,7 +42,6 @@ const Tickets = () => {
   }, []);
 
   const handleCrearTicket = () => {
-    // Simulación de agregar ticket
     setTickets([...tickets, { ...nuevoTicket, id: tickets.length + 1 }]);
     setMostrarModal(false);
     setNuevoTicket({
@@ -33,6 +49,19 @@ const Tickets = () => {
       descripcion: "",
       estado: "abierto",
     });
+  };
+
+  const getEstadoColor = (estado) => {
+    switch (estado.toLowerCase()) {
+      case "abierto":
+        return "text-red-600 font-bold";
+      case "en progreso":
+        return "text-yellow-600 font-bold";
+      case "cerrado":
+        return "text-green-600 font-bold";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -53,19 +82,25 @@ const Tickets = () => {
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
-            <th className="border border-gray-300 px-4 py-2">ID</th>
             <th className="border border-gray-300 px-4 py-2">Asunto</th>
             <th className="border border-gray-300 px-4 py-2">Descripción</th>
             <th className="border border-gray-300 px-4 py-2">Estado</th>
+            <th className="border border-gray-300 px-4 py-2">Prioridad</th>
+            <th className="border border-gray-300 px-4 py-2">Fecha de Creación</th>
           </tr>
         </thead>
         <tbody>
           {tickets.map((ticket) => (
-            <tr key={ticket.id} className="odd:bg-white even:bg-gray-100">
-              <td className="border border-gray-300 px-4 py-2">{ticket.id}</td>
+            <tr key={ticket.id_ticket} className="odd:bg-white even:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{ticket.asunto}</td>
               <td className="border border-gray-300 px-4 py-2">{ticket.descripcion}</td>
-              <td className="border border-gray-300 px-4 py-2 capitalize">{ticket.estado}</td>
+              <td className={`border border-gray-300 px-4 py-2 capitalize ${getEstadoColor(ticket.estado)}`}>
+                {ticket.estado}
+              </td>
+              <td className="border border-gray-300 px-4 py-2 capitalize">{ticket.prioridad}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                {new Date(ticket.fecha_creacion).toLocaleDateString()}
+              </td>
             </tr>
           ))}
         </tbody>

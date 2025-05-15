@@ -9,10 +9,14 @@ const CatalogoPage = () => {
 
   useEffect(() => {
     const fetchCatalogo = async () => {
-      try {
-        // Reemplaza el ID con el valor almacenado en localStorage si es necesario
-        const idEmpresa = 1; // Por ahora está fijo, luego puedes usar localStorage.getItem('id_empresa')
-        const response = await axios.get(`http://localhost:5002/api/productos/${idEmpresa}`);
+      const id_negocio = localStorage.getItem("id"); // Obtener el ID del negocio desde el localStorage
+      if (!id_negocio) {
+        console.error("No se encontró el ID del negocio en el localStorage.");
+        return;
+      }
+
+      try { 
+        const response = await axios.get(`http://localhost:5002/api/productos/${id_negocio}`);
         setEmpresa(response.data.nombre);
         setLogo(response.data.imagen); // Guardar el logo de la empresa
         setProductos(response.data.productos);
