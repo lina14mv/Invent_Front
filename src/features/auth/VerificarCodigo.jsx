@@ -16,10 +16,12 @@ const VerificarCodigo = ({ onSubmit }) => {
 
       if (response.status === 200) {
         const { token, tipo, debe_cambiar_contrasena, id, rol} = response.data;
-
+        // Guardar el token y el id en el localStorage
         localStorage.setItem('token', token);
         localStorage.setItem('id', id);
         localStorage.setItem('rol', rol);
+        localStorage.setItem('tipo', tipo);
+        // Redirigir según el tipo de usuario
 
         if (debe_cambiar_contrasena) {
           onSubmit('changePassword');
