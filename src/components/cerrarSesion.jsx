@@ -1,0 +1,36 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+export const CerrarSesion = () => {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      const datos = {
+        correo: localStorage.getItem("correo"), // reemplaza por el valor real
+        tipo: localStorage.getItem("tipo"), // ejemplo de cómo obtener el token
+      };
+      await axios.post("http://localhost:5002/api/cerrarSesion", datos, {
+        withCredentials: true,
+      });
+      localStorage.clear();
+      window.location.replace("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
+  return (
+    <>
+      <button onClick={handleLogout}>
+        <i>
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            className="text-4xl cursor-pointer"
+          />
+        </i>
+      </button>
+    </>
+  );
+};

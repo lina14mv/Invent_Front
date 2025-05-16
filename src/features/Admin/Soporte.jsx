@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import CardSoporte from "./components/CardSoporte";
+import { CerrarSesion } from "../../components/cerrarSesion";
 
 const Soporte = () => {
   const [task, setTask] = useState([]);
@@ -84,9 +85,7 @@ const Soporte = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold">Soporte</h1>
-        <i>
-          <FontAwesomeIcon icon={faCircleUser} className="text-4xl" />
-        </i>
+        <CerrarSesion />
       </div>
       <div className="flex columns-4 justify-evenly mt-8 text-xl h-full">
         <div className="px-4 text-center">

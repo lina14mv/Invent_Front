@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Notiflix from "notiflix";
+import { CerrarSesion } from "../../components/cerrarSesion";
 
 const Empresas = () => {
   const [modal, setModal] = useState(false);
@@ -319,9 +320,7 @@ const Empresas = () => {
               className="w-full pl-10 pr-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
           </div>
-          <i>
-            <FontAwesomeIcon icon={faCircleUser} className="text-4xl" />
-          </i>
+          <CerrarSesion />
         </div>
       </div>
       <div className="flex my-5 gap-3 justify-between">

@@ -1,9 +1,10 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { CardInfo } from "../../shared/Card";
 import { faBuildingCircleCheck, faCircleUser, faLayerGroup, faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useMemo, useState, useRef } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { CerrarSesion } from "../../components/cerrarSesion";
 
 const Inicio = () => {
   const [data, setData] = useState({});
@@ -56,9 +57,7 @@ const Inicio = () => {
     <>
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold">¡Hola Admin!</h1>
-        <i>
-          <FontAwesomeIcon icon={faCircleUser} className="text-4xl" />
-        </i>
+        <CerrarSesion />
       </div>
 
       <div className="flex px-6 justify-evenly py-8">

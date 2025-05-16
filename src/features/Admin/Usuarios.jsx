@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { faCircleUser, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import { CerrarSesion } from "../../components/cerrarSesion";
 
 const Usuarios = () => {
   const [negocios, setNegocios] = useState([]); // Lista de negocios
@@ -59,9 +60,7 @@ const Usuarios = () => {
               className="w-full pl-10 pr-4 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
           </div>
-          <i>
-            <FontAwesomeIcon icon={faCircleUser} className="text-4xl" />
-          </i>
+          <CerrarSesion />
         </div>
       </div>
 
