@@ -5,6 +5,7 @@ import LoginPage from "../pages/LoginPage";
 import EmpresaDashboardPage from "../pages/EmpresaDashboardPage";
 import CatalogoPage from "../pages/CatalogoPage";
 import { RutaProtegida } from "../components/RutaProtegida";
+import EmpleadoPage from "../pages/EmpleadoPage";
 
 const AppRoutes = () => {
 
@@ -30,6 +31,7 @@ const AppRoutes = () => {
             </RutaProtegida>
           }
         /> */}
+        <Route path="/Vendedor/*" element={<EmpleadoPage />} />
         <Route path="/Catalogo/*" element={<CatalogoPage />} />
       </Routes>
     </Router>

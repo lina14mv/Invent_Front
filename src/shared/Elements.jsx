@@ -48,7 +48,7 @@ const Option = (props) => {
         {/* Ícono que se mueve suavemente a la izquierda en hover */}
         <FontAwesomeIcon
           icon={props.icon}
-          className="text-black text-xl transition-all duration-300 group-hover:ml-2"
+          className="text-xl transition-all duration-300 group-hover:ml-2"
         />
 
         {/* Texto oculto por defecto, aparece en hover */}
