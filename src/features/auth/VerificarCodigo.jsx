@@ -15,12 +15,19 @@ const VerificarCodigo = ({ onSubmit }) => {
       });
 
       if (response.status === 200) {
-        const { token, tipo, debe_cambiar_contrasena, id, rol} = response.data;
+        const { token, tipo, debe_cambiar_contrasena, id, rol, nombre, fondo, color_primario, color_secundario} = response.data;
         // Guardar el token y el id en el localStorage
         localStorage.setItem('token', token);
         localStorage.setItem('id', id);
         localStorage.setItem('rol', rol);
         localStorage.setItem('tipo', tipo);
+        localStorage.setItem('nombre', nombre);
+        const limpiarColor = (color) => color?.replace(/'/g, "");
+document.documentElement.style.setProperty('--primary-color', limpiarColor(color_primario));
+document.documentElement.style.setProperty('--secondary-color', limpiarColor(color_secundario));
+document.documentElement.style.setProperty('--background-color', limpiarColor(fondo));
+        console.log("Colores:", color_primario, color_secundario, fondo);
+        
         // Redirigir según el tipo de usuario
 
         if (debe_cambiar_contrasena) {
@@ -30,7 +37,7 @@ const VerificarCodigo = ({ onSubmit }) => {
         } else if (tipo === 'negocio') {
           window.location.href = '/empresa';
         } else {
-          window.location.href = '/usuario/dashboard';
+          window.location.href = '/vendedor';
         }
       }
     } catch (err) {

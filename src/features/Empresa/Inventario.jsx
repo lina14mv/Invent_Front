@@ -18,8 +18,8 @@ const Inventario = () => {
 
       try {
         const response = await axios.get(
-          'http://localhost:5002/api/productos/1',
-          //`http://localhost:5002/api/productos/${id_negocio}` // Usar el ID en la ruta
+          //'http://localhost:5002/api/productos/1',
+          `http://localhost:5002/api/productos/${id_negocio}` // Usar el ID en la ruta
         );
 
         // Extraer el array de productos de la respuesta

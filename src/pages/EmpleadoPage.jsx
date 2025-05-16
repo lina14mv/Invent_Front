@@ -11,12 +11,12 @@ const EmpleadoPage = () => {
   };
 
   return (
-    <section className="flex primary">
-      <div className={`w-${ancho}`}>
+    <section className="flex">
+      <div className={ancho === "64" ? "w-64" : "w-14"}>
         <EmpleadoSidebar enviarAncho={cambiarAncho} />
       </div>
 
-      <div className="flex-1 h-screen p-7 background">
+      <div className="background flex-1 h-screen p-7">
         <Routes>
           <Route path="/" element={<Inicio />} />
         </Routes>

@@ -32,7 +32,7 @@ const AppRoutes = () => {
           }
         /> */}
         <Route path="/Vendedor/*" element={<EmpleadoPage />} />
-        <Route path="/Catalogo/*" element={<CatalogoPage />} />
+        <Route path="/Catalogo/:id_negocio*" element={<CatalogoPage />} />
       </Routes>
     </Router>
   );

@@ -1,8 +1,8 @@
 /* index.css */
 :root {
-  --primary-color: #ffffff;
-  --secondary-color: #545e56;
-  --background-color: #000000;
+  --primary-color: ;
+  --secondary-color: ;
+  --background-color: ;
 }
 
 /* :root {
@@ -20,11 +20,11 @@
 @import "tailwindcss";
 
 .primary {
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 .secondary {
-  background-color: var(--secondary-color);
+  background-color: var(--secondary-color) !important;
 }
 .background {
-  background-color: var(--background-color);
+  background-color: var(--background-color) !important;
 }

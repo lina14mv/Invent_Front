@@ -15,6 +15,7 @@ const Productos = () => {
   });
   const [imagen, setImagen] = useState(null);
   const [subiendoImagen, setSubiendoImagen] = useState(false);
+  const id_negocio = localStorage.getItem("id");
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -26,15 +27,18 @@ const Productos = () => {
 
       try {
         const response = await axios.get(
-          'http://localhost:5002/api/productos/1',
-          //`http://localhost:5002/api/productos/${id_negocio}` // Usar el ID en la ruta
+          //'http://localhost:5002/api/productos/1',
+          `http://localhost:5002/api/productos/${id_negocio}` // Usar el ID en la ruta
         );
 
         // Extraer el array de productos de la respuesta
         if (response.data && Array.isArray(response.data.productos)) {
           setProductos(response.data.productos);
         } else {
-          console.error("La respuesta de la API no contiene un array de productos:", response.data);
+          console.error(
+            "La respuesta de la API no contiene un array de productos:",
+            response.data
+          );
           setProductos([]);
         }
       } catch (err) {
@@ -113,6 +117,12 @@ const Productos = () => {
     }
   };
 
+
+  const handleCopiarEnlace = () => {
+    const url = `${window.location.origin}/Catalogo/${id_negocio}`;
+    navigator.clipboard.writeText(url);
+    alert("¡Enlace del catálogo copiado al portapapeles!");
+  };
   const productosFiltrados = productos.filter((producto) => {
     const cumpleEstado = filtroEstado
       ? producto.disponibilidad === filtroEstado
@@ -130,8 +140,23 @@ const Productos = () => {
         >
           Agregar Producto
         </button>
-      </div>
 
+        <a
+          href={`/Catalogo/${id_negocio}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500 flex items-center justify-center"
+        >
+          Ver Catálogo
+        </a>
+
+        <button
+          className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500"
+          onClick={handleCopiarEnlace}
+        >
+          Compartir enlace catálogo
+        </button>
+      </div>
       {/* Filtros */}
       <div className="flex gap-4 mb-5">
         <select
@@ -168,15 +193,34 @@ const Productos = () => {
         </thead>
         <tbody>
           {productosFiltrados.map((producto) => (
-            <tr key={producto.id_producto} className="odd:bg-white even:bg-gray-100">
-              <td className="border border-gray-300 px-4 py-2">{producto.nombre}</td>
-              <td className="border border-gray-300 px-4 py-2">{producto.descripcion}</td>
-              <td className="border border-gray-300 px-4 py-2">${producto.precio_compra}</td>
-              <td className="border border-gray-300 px-4 py-2">${producto.precio_venta}</td>
-              <td className="border border-gray-300 px-4 py-2">{producto.stock}</td>
-              <td className="border border-gray-300 px-4 py-2">{producto.disponibilidad}</td>
+            <tr
+              key={producto.id_producto}
+              className="odd:bg-white even:bg-gray-100"
+            >
               <td className="border border-gray-300 px-4 py-2">
-                <img src={producto.imagen} alt={producto.nombre} className="w-16 h-16 object-cover" />
+                {producto.nombre}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                {producto.descripcion}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                ${producto.precio_compra}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                ${producto.precio_venta}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                {producto.stock}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                {producto.disponibilidad}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                <img
+                  src={producto.imagen}
+                  alt={producto.nombre}
+                  className="w-16 h-16 object-cover"
+                />
               </td>
             </tr>
           ))}
@@ -185,89 +229,102 @@ const Productos = () => {
 
       {/* Modal para agregar producto */}
       {mostrarModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-5 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Agregar Producto</h2>
-            <div className="mb-4">
-              <label className="block font-semibold mb-2">Nombre</label>
-              <input
-                type="text"
-                value={nuevoProducto.nombre}
-                onChange={(e) =>
-                  setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })
-                }
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-2">Descripción</label>
-              <textarea
-                value={nuevoProducto.descripcion}
-                onChange={(e) =>
-                  setNuevoProducto({ ...nuevoProducto, descripcion: e.target.value })
-                }
-                className="w-full p-2 border rounded-md"
-              ></textarea>
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-2">Precio Compra</label>
-              <input
-                type="number"
-                value={nuevoProducto.precio_compra}
-                onChange={(e) =>
-                  setNuevoProducto({ ...nuevoProducto, precio_compra: e.target.value })
-                }
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-2">Precio Venta</label>
-              <input
-                type="number"
-                value={nuevoProducto.precio_venta}
-                onChange={(e) =>
-                  setNuevoProducto({ ...nuevoProducto, precio_venta: e.target.value })
-                }
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-2">Stock</label>
-              <input
-                type="number"
-                value={nuevoProducto.stock}
-                onChange={(e) =>
-                  setNuevoProducto({ ...nuevoProducto, stock: e.target.value })
-                }
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block font-semibold mb-2">Imagen</label>
-              <input
-                type="file"
-                onChange={(e) => setImagen(e.target.files[0])}
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div className="flex justify-end gap-4">
-              <button
-                className="bg-gray-300 px-4 py-2 rounded-md"
-                onClick={() => setMostrarModal(false)}
-              >
-                Cancelar
-              </button>
-              <button
-                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500"
-                onClick={handleAgregarProducto}
-                disabled={subiendoImagen}
-              >
-                {subiendoImagen ? "Subiendo..." : "Guardar"}
-              </button>
-            </div>
-          </div>
+  <div className="fixed inset-0  flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto border border-green-600">
+      <h2 className="text-xl font-bold mb-4">Agregar Producto</h2>
+      <div className="mb-4">
+        <label className="block font-semibold mb-2">Nombre</label>
+        <input
+          type="text"
+          value={nuevoProducto.nombre}
+          onChange={(e) =>
+            setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })
+          }
+          className="w-full p-2 border rounded-md"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block font-semibold mb-2">Descripción</label>
+        <textarea
+          value={nuevoProducto.descripcion}
+          onChange={(e) =>
+            setNuevoProducto({
+              ...nuevoProducto,
+              descripcion: e.target.value,
+            })
+          }
+          className="w-full p-2 border rounded-md"
+        ></textarea>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block font-semibold mb-2">Precio Compra</label>
+          <input
+            type="number"
+            value={nuevoProducto.precio_compra}
+            onChange={(e) =>
+              setNuevoProducto({
+                ...nuevoProducto,
+                precio_compra: e.target.value,
+              })
+            }
+            className="w-full p-2 border rounded-md"
+          />
         </div>
-      )}
+        <div>
+          <label className="block font-semibold mb-2">Precio Venta</label>
+          <input
+            type="number"
+            value={nuevoProducto.precio_venta}
+            onChange={(e) =>
+              setNuevoProducto({
+                ...nuevoProducto,
+                precio_venta: e.target.value,
+              })
+            }
+            className="w-full p-2 border rounded-md"
+          />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block font-semibold mb-2">Stock</label>
+          <input
+            type="number"
+            value={nuevoProducto.stock}
+            onChange={(e) =>
+              setNuevoProducto({ ...nuevoProducto, stock: e.target.value })
+            }
+            className="w-full p-2 border rounded-md"
+          />
+        </div>
+        <div>
+          <label className="block font-semibold mb-2">Imagen</label>
+          <input
+            type="file"
+            onChange={(e) => setImagen(e.target.files[0])}
+            className="w-full p-2 border rounded-md"
+          />
+        </div>
+      </div>
+      <div className="flex justify-end gap-4">
+        <button
+          className="bg-gray-300 px-4 py-2 rounded-md"
+          onClick={() => setMostrarModal(false)}
+        >
+          Cancelar
+        </button>
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500"
+          onClick={handleAgregarProducto}
+          disabled={subiendoImagen}
+        >
+          {subiendoImagen ? "Subiendo..." : "Guardar"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };
