@@ -1,21 +1,27 @@
 /* index.css */
-:root {
-  --primary-color: ;
-  --secondary-color: ;
-  --background-color: ;
-}
+/* :root {
+  --primary-color: #ffffff;
+  --secondary-color: #545e56;
+  --background-color: #000000;
+} */
 
 /* :root {
   --primary-color: #000000;
   --secondary-color: #f8f8f8;
   --background-color: #5be494;
-}  */
+} */
 
 /* :root {
   --primary-color: #ffffff;
   --secondary-color: #000000;
   --background-color: #ee7433;
 } */
+ 
+:root {
+  --primary-color: ;
+  --secondary-color: ;
+  --background-color: ;
+}
 
 @import "tailwindcss";
 
