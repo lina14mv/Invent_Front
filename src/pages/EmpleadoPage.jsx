@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { EmpleadoSidebar } from "../components/EmpleadoSidebar";
 import { Inicio } from "../features/Empleado/Inicio";
+import Ventas from "../features/Empresa/Ventas";
+import Inventario from "../features/Empresa/Inventario";
+import Productos from "../features/Empresa/Productos";
 import { Route, Routes } from "react-router-dom";
 import axios from "axios";
 
@@ -45,6 +48,9 @@ const EmpleadoPage = () => {
       <div className="background flex-1 h-screen p-7">
         <Routes>
           <Route path="/" element={<Inicio />} />
+          <Route path="/ventas" element={<Ventas />} />
+          <Route path="/inventario" element={<Inventario />} />
+          <Route path="/productos" element={<Productos />} />
         </Routes>
       </div>
     </section>

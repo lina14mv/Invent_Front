@@ -5,21 +5,41 @@ const Inventario = () => {
   const [productos, setProductos] = useState([]);
   const [cantidadModificar, setCantidadModificar] = useState({});
   const [alertas, setAlertas] = useState([]);
+  const [idNegocioReal, setIdNegocioReal] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null); // Producto a editar o agregar
 
-  useEffect(() => {
-    const fetchProductos = async () => {
-      const id_negocio = localStorage.getItem("id"); // Obtener el ID del negocio desde el localStorage
-      if (!id_negocio) {
-        console.error("No se encontró el ID del negocio en el localStorage.");
-        return;
-      }
 
+   const tipo = localStorage.getItem("tipo");
+    const id_usuario = localStorage.getItem("id");
+    const id_negocio_local = localStorage.getItem("id");
+  
+    useEffect(() => {
+      const obtenerIdNegocio = async () => {
+        if (tipo === "usuario") {
+          try {
+            const res = await axios.get(
+              `http://localhost:5002/api/usuario/${id_usuario}`
+            );
+            // Ajusta el campo según tu backend, por ejemplo: pertenece_negocio
+            setIdNegocioReal(res.data.pertenece_negocio);
+          } catch (err) {
+            console.error("Error al obtener el negocio del usuario:", err);
+          }
+        } else {
+          setIdNegocioReal(id_negocio_local);
+        }
+      };
+      obtenerIdNegocio();
+    }, [tipo, id_usuario, id_negocio_local]);
+
+  useEffect(() => {
+    if (!idNegocioReal) return; // Esperar a que se obtenga el ID del negocio
+    const fetchProductos = async () => {
       try {
         const response = await axios.get(
           //'http://localhost:5002/api/productos/1',
-          `http://localhost:5002/api/productos/${id_negocio}` // Usar el ID en la ruta
+          `http://localhost:5002/api/productos/${idNegocioReal}` // Usar el ID en la ruta
         );
 
         // Extraer el array de productos de la respuesta
@@ -37,7 +57,7 @@ const Inventario = () => {
     };
 
     fetchProductos();
-  }, []);
+  }, [idNegocioReal]);
 
   const verificarAlertas = (productos) => {
     const productosBajoStock = productos.filter((producto) => producto.stock < 10);
@@ -203,8 +223,8 @@ const Inventario = () => {
 
       {/* Modal para agregar o editar producto */}
       {mostrarModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-5 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 flex justify-center items-center backdrop-blur-xs">
+          <div className="bg-white p-5 rounded-lg shadow-lg w-96 border">
             <h2 className="text-xl font-bold mb-4">
               {productoSeleccionado?.id_producto ? "Editar Producto" : "Agregar Producto"}
             </h2>

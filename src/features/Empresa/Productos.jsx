@@ -15,20 +15,38 @@ const Productos = () => {
   });
   const [imagen, setImagen] = useState(null);
   const [subiendoImagen, setSubiendoImagen] = useState(false);
-  const id_negocio = localStorage.getItem("id");
+  const [idNegocioReal, setIdNegocioReal] = useState(null);
+
+  const tipo = localStorage.getItem("tipo");
+  const id_usuario = localStorage.getItem("id");
+  const id_negocio_local = localStorage.getItem("id");
 
   useEffect(() => {
-    const fetchProductos = async () => {
-      const id_negocio = localStorage.getItem("id"); // Obtener el ID del negocio desde el localStorage
-      if (!id_negocio) {
-        console.error("No se encontró el ID del negocio en el localStorage.");
-        return;
+    const obtenerIdNegocio = async () => {
+      if (tipo === "usuario") {
+        try {
+          const res = await axios.get(
+            `http://localhost:5002/api/usuario/${id_usuario}`
+          );
+          // Ajusta el campo según tu backend, por ejemplo: pertenece_negocio
+          setIdNegocioReal(res.data.pertenece_negocio);
+        } catch (err) {
+          console.error("Error al obtener el negocio del usuario:", err);
+        }
+      } else {
+        setIdNegocioReal(id_negocio_local);
       }
+    };
+    obtenerIdNegocio();
+  }, [tipo, id_usuario, id_negocio_local]);
 
+  useEffect(() => {
+    if (!idNegocioReal) return; // Esperar a que se obtenga el ID del negocio
+    const fetchProductos = async () => {
       try {
         const response = await axios.get(
           //'http://localhost:5002/api/productos/1',
-          `http://localhost:5002/api/productos/${id_negocio}` // Usar el ID en la ruta
+          `http://localhost:5002/api/productos/${idNegocioReal}` // Usar el ID en la ruta
         );
 
         // Extraer el array de productos de la respuesta
@@ -48,7 +66,7 @@ const Productos = () => {
     };
 
     fetchProductos();
-  }, []);
+  }, [idNegocioReal]);
 
   const subirImagenACloudinary = async () => {
     if (!imagen) return null;
@@ -73,8 +91,8 @@ const Productos = () => {
   };
 
   const handleAgregarProducto = async () => {
-    const id_negocio = localStorage.getItem("id"); // Obtener el ID del negocio desde el localStorage
-    if (!id_negocio) {
+    // Obtener el ID del negocio desde el localStorage
+    if (!idNegocioReal) {
       alert("No se encontró el ID del negocio en el localStorage.");
       return;
     }
@@ -87,7 +105,7 @@ const Productos = () => {
 
     const productoData = {
       ...nuevoProducto,
-      id_negocio: parseInt(id_negocio),
+      idNegocioReal: parseInt(idNegocioReal),
       imagen_url: imagenUrl,
     };
 
@@ -117,9 +135,8 @@ const Productos = () => {
     }
   };
 
-
   const handleCopiarEnlace = () => {
-    const url = `${window.location.origin}/Catalogo/${id_negocio}`;
+    const url = `${window.location.origin}/Catalogo/${idNegocioReal}`;
     navigator.clipboard.writeText(url);
     alert("¡Enlace del catálogo copiado al portapapeles!");
   };
@@ -142,7 +159,7 @@ const Productos = () => {
         </button>
 
         <a
-          href={`/Catalogo/${id_negocio}`}
+          href={`/Catalogo/${idNegocioReal}`}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500 flex items-center justify-center"
@@ -229,102 +246,107 @@ const Productos = () => {
 
       {/* Modal para agregar producto */}
       {mostrarModal && (
-  <div className="fixed inset-0  flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto border border-green-600">
-      <h2 className="text-xl font-bold mb-4">Agregar Producto</h2>
-      <div className="mb-4">
-        <label className="block font-semibold mb-2">Nombre</label>
-        <input
-          type="text"
-          value={nuevoProducto.nombre}
-          onChange={(e) =>
-            setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })
-          }
-          className="w-full p-2 border rounded-md"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold mb-2">Descripción</label>
-        <textarea
-          value={nuevoProducto.descripcion}
-          onChange={(e) =>
-            setNuevoProducto({
-              ...nuevoProducto,
-              descripcion: e.target.value,
-            })
-          }
-          className="w-full p-2 border rounded-md"
-        ></textarea>
-      </div>
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block font-semibold mb-2">Precio Compra</label>
-          <input
-            type="number"
-            value={nuevoProducto.precio_compra}
-            onChange={(e) =>
-              setNuevoProducto({
-                ...nuevoProducto,
-                precio_compra: e.target.value,
-              })
-            }
-            className="w-full p-2 border rounded-md"
-          />
+        <div className="fixed inset-0  flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto border border-green-600">
+            <h2 className="text-xl font-bold mb-4">Agregar Producto</h2>
+            <div className="mb-4">
+              <label className="block font-semibold mb-2">Nombre</label>
+              <input
+                type="text"
+                value={nuevoProducto.nombre}
+                onChange={(e) =>
+                  setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })
+                }
+                className="w-full p-2 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block font-semibold mb-2">Descripción</label>
+              <textarea
+                value={nuevoProducto.descripcion}
+                onChange={(e) =>
+                  setNuevoProducto({
+                    ...nuevoProducto,
+                    descripcion: e.target.value,
+                  })
+                }
+                className="w-full p-2 border rounded-md"
+              ></textarea>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block font-semibold mb-2">
+                  Precio Compra
+                </label>
+                <input
+                  type="number"
+                  value={nuevoProducto.precio_compra}
+                  onChange={(e) =>
+                    setNuevoProducto({
+                      ...nuevoProducto,
+                      precio_compra: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 border rounded-md"
+                />
+              </div>
+              <div>
+                <label className="block font-semibold mb-2">Precio Venta</label>
+                <input
+                  type="number"
+                  value={nuevoProducto.precio_venta}
+                  onChange={(e) =>
+                    setNuevoProducto({
+                      ...nuevoProducto,
+                      precio_venta: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 border rounded-md"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block font-semibold mb-2">Stock</label>
+                <input
+                  type="number"
+                  value={nuevoProducto.stock}
+                  onChange={(e) =>
+                    setNuevoProducto({
+                      ...nuevoProducto,
+                      stock: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 border rounded-md"
+                />
+              </div>
+              <div>
+                <label className="block font-semibold mb-2">Imagen</label>
+                <input
+                  type="file"
+                  onChange={(e) => setImagen(e.target.files[0])}
+                  className="w-full p-2 border rounded-md"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-4">
+              <button
+                className="bg-gray-300 px-4 py-2 rounded-md"
+                onClick={() => setMostrarModal(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500"
+                onClick={handleAgregarProducto}
+                disabled={subiendoImagen}
+              >
+                {subiendoImagen ? "Subiendo..." : "Guardar"}
+              </button>
+            </div>
+          </div>
         </div>
-        <div>
-          <label className="block font-semibold mb-2">Precio Venta</label>
-          <input
-            type="number"
-            value={nuevoProducto.precio_venta}
-            onChange={(e) =>
-              setNuevoProducto({
-                ...nuevoProducto,
-                precio_venta: e.target.value,
-              })
-            }
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block font-semibold mb-2">Stock</label>
-          <input
-            type="number"
-            value={nuevoProducto.stock}
-            onChange={(e) =>
-              setNuevoProducto({ ...nuevoProducto, stock: e.target.value })
-            }
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-        <div>
-          <label className="block font-semibold mb-2">Imagen</label>
-          <input
-            type="file"
-            onChange={(e) => setImagen(e.target.files[0])}
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-      </div>
-      <div className="flex justify-end gap-4">
-        <button
-          className="bg-gray-300 px-4 py-2 rounded-md"
-          onClick={() => setMostrarModal(false)}
-        >
-          Cancelar
-        </button>
-        <button
-          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500"
-          onClick={handleAgregarProducto}
-          disabled={subiendoImagen}
-        >
-          {subiendoImagen ? "Subiendo..." : "Guardar"}
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 };

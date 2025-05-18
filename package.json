@@ -22,6 +22,7 @@
     "chart.js": "^4.4.9",
     "cloudinary": "^2.6.1",
     "framer-motion": "^12.6.0",
+    "jspdf": "^3.0.1",
     "notiflix": "^3.2.8",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",

@@ -1,12 +1,61 @@
-import { faBars, faBuildingUser, faCoins, faGears, faTicket, faUsersGear, faWarehouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faBox,
+  faShoppingCart,
+  faTicket,
+  faWarehouse,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Boton, Option } from "../shared/Elements";
+import { useEffect } from "react";
+import axios from "axios";
 
 export const EmpleadoSidebar = ({ enviarAncho }) => {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [idNegocioReal, setIdNegocioReal] = useState(null);
   const [isOpen, setIsOpen] = useState(true);
+  const [nombre, setNombre] = useState("");
+
+  const id_usuario = localStorage.getItem("id");
+  const tipo = localStorage.getItem("tipo");
+  const id_negocio_local = localStorage.getItem("id");
+
+  useEffect(() => {
+    const obtenerIdNegocio = async () => {
+      if (tipo === "usuario") {
+        try {
+          const res = await axios.get(
+            `http://localhost:5002/api/usuario/${id_usuario}`
+          );
+          // Ajusta el campo según tu backend, por ejemplo: pertenece_negocio
+          setIdNegocioReal(res.data.pertenece_negocio);
+        } catch (err) {
+          console.error("Error al obtener el negocio del usuario:", err);
+        }
+      } else {
+        setIdNegocioReal(id_negocio_local);
+      }
+    };
+    obtenerIdNegocio();
+  }, [tipo, id_usuario, id_negocio_local]);
+
+  useEffect(() => {
+    const nombreNegocio = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5002/api/negocio/${idNegocioReal}`
+        );
+        setNombre(res.data.nombre);
+      } catch (err) {
+        console.error("Error al obtener el nombre del negocio:", err);
+      }
+    };
+    if (idNegocioReal) {
+      nombreNegocio();
+    }
+  }, [idNegocioReal]);
 
   return (
     <>
@@ -25,19 +74,19 @@ export const EmpleadoSidebar = ({ enviarAncho }) => {
                 to="/Vendedor"
                 onClick={() => setSelectedOption("null")}
               >
-                INVENT<span className="animate-pulse">+</span>+
+                {nombre}<span className="animate-pulse">+</span>+
               </Link>
               <div className="flex flex-col items-center justify-center mt-4">
                 {[
                   {
                     label: "Productos",
                     href: "/Vendedor/productos",
-                    icon: faBuildingUser,
+                    icon: faBox,
                   },
                   {
                     label: "Ventas",
                     href: "/Vendedor/ventas",
-                    icon: faBuildingUser,
+                    icon: faShoppingCart,
                   },
                   {
                     label: "Inventario",
@@ -45,10 +94,10 @@ export const EmpleadoSidebar = ({ enviarAncho }) => {
                     icon: faWarehouse,
                   },
                   {
-                    label: "Catalogo",
-                    href: "/Vendedor/catalogo",
-                    icon: faUsersGear,
-                  }
+                    label: "Tickets",
+                    href: "/Vendedor/tickets",
+                    icon: faTicket,
+                  },
                 ].map((option) => (
                   <Option
                     key={option.label}

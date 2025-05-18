@@ -1,9 +1,16 @@
 import { Navigate } from "react-router-dom";
 
-export const RutaProtegida = ({ tipo, children }) => {
+export const RutaProtegida = ({ tipo, rol, children }) => {
   const correo = localStorage.getItem("correo");
-  const rol = localStorage.getItem("rol");
-  if (rol === tipo) {
+  const Tipo = localStorage.getItem("tipo");
+  const Rol = localStorage.getItem("rol");
+
+  if (rol !== "null") {
+    if (tipo === Tipo && rol === Rol) {
+      return children;
+    }
+  }
+  if (Tipo === tipo) {
     return children;
   }
 

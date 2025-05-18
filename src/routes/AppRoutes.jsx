@@ -17,22 +17,36 @@ const AppRoutes = () => {
         <Route
           path="/Manage/*"
           element={
-            <RutaProtegida tipo="superadmin">
+            <RutaProtegida tipo="administrador" rol="null">
               <ManageBusinessesPage />
             </RutaProtegida>
           }
         />
-        <Route path="/Empresa/*" element={<EmpresaDashboardPage />} /> 
-        {/* <Route
+        <Route
           path="/Empresa/*"
           element={
-            <RutaProtegida tipo="empresa">
+            <RutaProtegida tipo="negocio" rol="null">
+              <EmpresaDashboardPage />
+            </RutaProtegida>
+          }
+        />
+        {/* <Route
+          path="/Admin/*"
+          element={
+            <RutaProtegida tipo="usuario" rol="administrador">
               <EmpresaDashboardPage />
             </RutaProtegida>
           }
         /> */}
-        <Route path="/Vendedor/*" element={<EmpleadoPage />} />
-        <Route path="/Catalogo/:id_negocio*" element={<CatalogoPage />} />
+        <Route
+          path="/Vendedor/*"
+          element={
+            <RutaProtegida tipo="usuario" rol="empleado">
+              <EmpleadoPage />
+            </RutaProtegida>
+          }
+        />
+        <Route path="/Catalogo/:id_negocio" element={<CatalogoPage />} />
       </Routes>
     </Router>
   );

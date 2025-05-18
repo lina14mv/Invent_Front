@@ -8,6 +8,7 @@ import Finanzas from "../features/empresa/Finanzas";
 import Tickets from "../features/empresa/Tickets";
 import Configuracion from "../features/empresa/Configuracion";
 import Empleados from "../features/empresa/Empleados";
+import { CerrarSesion } from "../components/CerrarSesion";
 import { useState } from "react";
 
 const EmpresaDashboardPage = () => {
@@ -18,6 +19,7 @@ const EmpresaDashboardPage = () => {
   };
 
   return (
+    
     <section className="flex">
       {/* Sidebar */}
       <div className={`w-${ancho}`}>
@@ -26,6 +28,10 @@ const EmpresaDashboardPage = () => {
 
       {/* Contenido principal */}
       <div className="flex-1 h-full p-7">
+        <div className="flex justify-between">
+                <h1 className="text-3xl font-semibold">¡Hola Admin!</h1>
+                <CerrarSesion />
+              </div>
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/productos" element={<Productos />} />
