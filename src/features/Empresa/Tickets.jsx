@@ -86,7 +86,12 @@ const [filtroPrioridad, setFiltroPrioridad] = useState("");
               asunto: nuevoTicket.asunto,
               descripcion: nuevoTicket.descripcion,
             };
-      await axios.post("http://localhost:5002/api/crear-tickets", payload);
+            const token = localStorage.getItem("token");
+      await axios.post("http://localhost:5002/api/crear-tickets", payload,{
+         headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
       setMostrarModal(false);
       setNuevoTicket({
         asunto: "",

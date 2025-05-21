@@ -115,7 +115,7 @@ export const EmpleadoSidebar = ({ enviarAncho }) => {
                     key={option.label}
                     className={`${
                       option.label === "Empresas" ? "border-t" : ""
-                    } ${selectedOption === option.label ? "bg-green-300" : ""}`}
+                    } ${selectedOption === option.label ? "--secondary-color" : ""}`}
                     onClick={() => setSelectedOption(option.label)}
                     href={option.href}
                     icon={option.icon}

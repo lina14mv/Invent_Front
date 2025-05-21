@@ -10,37 +10,95 @@ const Configuracion = () => {
     nit: "",
     id: "",
   });
+  const DISEÑOS = [
+    {
+      nombre: "Predeterminado",
+      fondo: "white",
+      color_primario: "black",
+      color_secundario: "palegreen",
+    },
+    {
+      nombre: "Lavanda",
+      fondo: "lavender",
+      color_primario: "mediumslateblue",
+      color_secundario: "white",
+    },
+    {
+      nombre: "Tierra y Sol",
+      fondo: "moccasin",
+      color_primario: "peru",
+      color_secundario: "peachpuff",
+    },
+    {
+      nombre: "Laguna",
+      fondo: "honeydew",
+      color_primario: "goldenrod",
+      color_secundario: "paleturquoise",
+    }, 
+     {
+      nombre: "Oceano",
+      fondo: "aliceblue",
+      color_primario: "teal",
+      color_secundario: "midnightblue",
+    },
+    {
+      nombre: "Sobrio",
+      fondo: "white",
+      color_primario: "purple",
+      color_secundario: "gray",
+    },
+    {
+      nombre: "Volcan",
+      fondo: "white",
+      color_primario: "orange",
+      color_secundario: "brown",
+    },
+    {
+      nombre: "Coral",
+      fondo: "seashell",
+      color_primario: "coral",
+      color_secundario: "darkslategray",
+    },
+    
+  ];
+
   const [editando, setEditando] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const id_negocio = localStorage.getItem("id");
+  const [diseñoSeleccionado, setDiseñoSeleccionado] = useState("");
   console.log("ID Negocio:", id_negocio);
 
- useEffect(() => {
-  const fetchEmpresa = async () => {
-    try {
-      const response = await axios.get("http://localhost:5002/api/negocios");
-      const negocios = Array.isArray(response.data) ? response.data : response.data.negocios;
-      // Ajusta el nombre del campo según tu backend
-      const negocio = negocios.find(
-        (n) => String(n.id_negocio || n.id) === String(id_negocio)
-      );
-      if (negocio) {
-        setEmpresa({
-          nombre: negocio.nombre_negocio || negocio.nombre || "",
-          correo: negocio.correo || "",
-          telefono: negocio.telefono || "",
-          direccion: negocio.direccion || "",
-          nit: negocio.nit || "",
-          id: Number(negocio.id_negocio || negocio.id), // <-- asegúrate que es número
-        });
+  useEffect(() => {
+    const fetchEmpresa = async () => {
+      try {
+        const response = await axios.get("http://localhost:5002/api/negocios");
+        const negocios = Array.isArray(response.data)
+          ? response.data
+          : response.data.negocios;
+        // Ajusta el nombre del campo según tu backend
+        const negocio = negocios.find(
+          (n) => String(n.id_negocio || n.id) === String(id_negocio)
+        );
+        if (negocio) {
+          setEmpresa({
+            nombre: negocio.nombre_negocio || negocio.nombre || "",
+            correo: negocio.correo || "",
+            telefono: negocio.telefono || "",
+            direccion: negocio.direccion || "",
+            nit: negocio.nit || "",
+            fondo: negocio.fondo || "",
+            color_primario: negocio.color_primario || "",
+            color_secundario: negocio.color_secundario || "",
+            id: Number(negocio.id_negocio || negocio.id), // <-- asegúrate que es número
+          });
+        }
+      } catch (err) {
+        console.error("Error al cargar los datos de la empresa:", err);
       }
-    } catch (err) {
-      console.error("Error al cargar los datos de la empresa:", err);
-    }
-  };
+    };
 
-  fetchEmpresa();
-}, [id_negocio]);
+    fetchEmpresa();
+  }, [id_negocio]);
 
   const handleEditar = () => setEditando(true);
 
@@ -52,22 +110,22 @@ const Configuracion = () => {
   };
 
   const handleGuardarCambios = async () => {
-  if (!empresa.id) {
-    setMensaje("No se encontró el ID de la empresa.");
-    return;
-  }
-  try {
-    await axios.put(
-      `http://localhost:5002/api/${empresa.id}/editarE`,
-      empresa
-    );
-    setMensaje("Los datos de la empresa se han actualizado correctamente.");
-    setEditando(false);
-  } catch (err) {
-    console.error("Error al guardar los cambios:", err);
-    setMensaje("Ocurrió un error al guardar los cambios.");
-  }
-};
+    if (!empresa.id) {
+      setMensaje("No se encontró el ID de la empresa.");
+      return;
+    }
+    try {
+      await axios.put(
+        `http://localhost:5002/api/${empresa.id}/editarE`,
+        empresa
+      );
+      setMensaje("Los datos de la empresa se han actualizado correctamente.");
+      setEditando(false);
+    } catch (err) {
+      console.error("Error al guardar los cambios:", err);
+      setMensaje("Ocurrió un error al guardar los cambios.");
+    }
+  };
 
   return (
     <div className="p-5">
@@ -81,7 +139,9 @@ const Configuracion = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="mb-4">
-          <label className="block font-semibold mb-2">Nombre de la Empresa</label>
+          <label className="block font-semibold mb-2">
+            Nombre de la Empresa
+          </label>
           <input
             type="text"
             value={empresa.nombre}
@@ -106,7 +166,9 @@ const Configuracion = () => {
             type="text"
             value={empresa.telefono}
             disabled={!editando}
-            onChange={(e) => setEmpresa({ ...empresa, telefono: e.target.value })}
+            onChange={(e) =>
+              setEmpresa({ ...empresa, telefono: e.target.value })
+            }
             className="w-full p-2 border rounded-md"
           />
         </div>
@@ -116,7 +178,9 @@ const Configuracion = () => {
             type="text"
             value={empresa.direccion}
             disabled={!editando}
-            onChange={(e) => setEmpresa({ ...empresa, direccion: e.target.value })}
+            onChange={(e) =>
+              setEmpresa({ ...empresa, direccion: e.target.value })
+            }
             className="w-full p-2 border rounded-md"
           />
         </div>
@@ -129,6 +193,61 @@ const Configuracion = () => {
             onChange={(e) => setEmpresa({ ...empresa, nit: e.target.value })}
             className="w-full p-2 border rounded-md"
           />
+        </div>
+        <div className="mb-4">
+          <label className="block font-semibold mb-2">Diseño de Colores</label>
+          <select
+            value={diseñoSeleccionado}
+            disabled={!editando}
+            onChange={(e) => {
+              setDiseñoSeleccionado(e.target.value);
+              const diseño = DISEÑOS.find((d) => d.nombre === e.target.value);
+              if (diseño) {
+                setEmpresa({
+                  ...empresa,
+                  fondo: diseño.fondo,
+                  color_primario: diseño.color_primario,
+                  color_secundario: diseño.color_secundario,
+                });
+              }
+            }}
+            className="w-full p-2 border rounded-md"
+          >
+            <option value="">Selecciona un diseño</option>
+            {DISEÑOS.map((d) => (
+              <option key={d.nombre} value={d.nombre}>
+                {d.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block font-semibold mb-2">Color Fondo</label>
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded border"
+              style={{ background: empresa.fondo }}
+            ></div>
+          </div>
+        </div>
+        <div className="mb-4">
+          <label className="block font-semibold mb-2">Color Primario</label>
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded border"
+              style={{ background: empresa.color_primario }}
+            ></div>
+          </div>
+        </div>
+        <div className="mb-4">
+          <label className="block font-semibold mb-2">Color Secundario</label>
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded border"
+              style={{ background: empresa.color_secundario }}
+            ></div>
+          </div>
         </div>
       </div>
 
