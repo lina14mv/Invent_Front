@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { EmpleadoSidebar } from "../components/EmpleadoSidebar";
-import { Inicio } from "../features/Empleado/Inicio";
+//import { Inicio } from "../features/Empleado/Inicio";
+import Inicio from "../features/Empresa/Inicio";
 import Ventas from "../features/Empresa/Ventas";
 import Inventario from "../features/Empresa/Inventario";
 import Productos from "../features/Empresa/Productos";
-import { Route, Routes } from "react-router-dom";
+import Tickets from "../features/Empresa/Tickets";
+import { CerrarSesion } from "../components/CerrarSesion";
+import {Route, Routes, Navigate} from "react-router-dom";
 import axios from "axios";
 
 const EmpleadoPage = () => {
   const [ancho, setAncho] = useState("64");
+  const nombreUsuario = localStorage.getItem("nombre") || "USUARIO";
+  const rol = localStorage.getItem("rol");
 
   const cambiarAncho = (ancho) => {
     setAncho(ancho);
@@ -39,6 +44,7 @@ const EmpleadoPage = () => {
       });
   }, []);
 
+  
   return (
     <section className="flex primary">
       <div className={ancho === "64" ? "w-64" : "w-14"}>
@@ -46,11 +52,22 @@ const EmpleadoPage = () => {
       </div>
 
       <div className="background flex-1 h-screen p-7">
+        {/* Contenido principal */}
+                <div className="flex justify-between">
+                        <h1 className="text-3xl font-semibold">¡Hola {nombreUsuario}!</h1>
+                        <CerrarSesion />
+                      </div>
         <Routes>
-          <Route path="/" element={<Inicio />} />
+          {/* Redirección condicional */}
+          {rol === "administrador" ? (
+            <Route path="/" element={<Inicio/>} />
+          ) : (
+            <Route path="/" element={<Ventas/>} />
+          )}
           <Route path="/ventas" element={<Ventas />} />
           <Route path="/inventario" element={<Inventario />} />
           <Route path="/productos" element={<Productos />} />
+          <Route path="/tickets" element={<Tickets />} />
         </Routes>
       </div>
     </section>

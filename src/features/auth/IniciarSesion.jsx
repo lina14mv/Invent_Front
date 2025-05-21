@@ -9,6 +9,8 @@ const IniciarSesion = ({ onSubmit, onPasswordRecovery }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Llama a la ruta de actualizar activo antes de hacer login
+    await axios.get('http://localhost:5002/api/actualizar-activo-negocios');
       const response = await axios.post('http://localhost:5002/api/login', {
         correo: email,
         contraseña: password,
@@ -19,6 +21,7 @@ const IniciarSesion = ({ onSubmit, onPasswordRecovery }) => {
         // localStorage.setItem('nombre', nombre);
         onSubmit();
       }
+      
     } catch (err) {
       console.error(err);
       setError('Error al iniciar sesión, revisa tu correo o contraseña.');

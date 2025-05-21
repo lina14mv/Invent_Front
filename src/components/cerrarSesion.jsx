@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faDoorOpen } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -26,8 +26,8 @@ export const CerrarSesion = () => {
       <button onClick={handleLogout}>
         <i>
           <FontAwesomeIcon
-            icon={faCircleUser}
-            className="text-4xl cursor-pointer"
+            icon={faDoorOpen}
+            className="text-2xl cursor-pointer"
           />
         </i>
       </button>
