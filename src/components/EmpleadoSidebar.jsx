@@ -3,6 +3,7 @@ import {
   faBox,
   faShoppingCart,
   faTicket,
+  faUsers,
   faWarehouse,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,6 +22,7 @@ export const EmpleadoSidebar = ({ enviarAncho }) => {
   const id_usuario = localStorage.getItem("id");
   const tipo = localStorage.getItem("tipo");
   const id_negocio_local = localStorage.getItem("id");
+  const rol = localStorage.getItem("rol");
 
   useEffect(() => {
     const obtenerIdNegocio = async () => {
@@ -74,7 +76,8 @@ export const EmpleadoSidebar = ({ enviarAncho }) => {
                 to="/Vendedor"
                 onClick={() => setSelectedOption("null")}
               >
-                {nombre}<span className="animate-pulse">+</span>+
+                {nombre}
+                <span className="animate-pulse">+</span>+
               </Link>
               <div className="flex flex-col items-center justify-center mt-4">
                 {[
@@ -98,6 +101,15 @@ export const EmpleadoSidebar = ({ enviarAncho }) => {
                     href: "/Vendedor/tickets",
                     icon: faTicket,
                   },
+                  ...rol === "administrador"
+                    ? [
+                        {
+                          label: "Empleados",
+                          href: "/Vendedor/empleados",
+                          icon: faUsers,
+                        },
+                      ]
+                    : [],
                 ].map((option) => (
                   <Option
                     key={option.label}

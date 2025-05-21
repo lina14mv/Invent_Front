@@ -15,29 +15,52 @@ const Empleados = () => {
   });
   const [empleadoEditar, setEmpleadoEditar] = useState(null);
   const [filtroEstado, setFiltroEstado] = useState("todos");
-  const id_negocio = localStorage.getItem("id");
+  const [idNegocioReal, setIdNegocioReal] = useState(null);
 
+  const tipo = localStorage.getItem("tipo");
+  const id_usuario = localStorage.getItem("id");
+  const id_negocio_local = localStorage.getItem("id");
+
+  // Obtener el id del negocio según el tipo
   useEffect(() => {
+    const obtenerIdNegocio = async () => {
+      if (tipo === "usuario") {
+        try {
+          const res = await axios.get(
+            `http://localhost:5002/api/usuario/${id_usuario}`
+          );
+          setIdNegocioReal(res.data.pertenece_negocio);
+        } catch (err) {
+          console.error("Error al obtener el negocio del usuario:", err);
+        }
+      } else {
+        setIdNegocioReal(id_negocio_local);
+      }
+    };
+    obtenerIdNegocio();
+  }, [tipo, id_usuario, id_negocio_local]);
+
+  // Cargar empleados cuando se tenga el id del negocio
+  useEffect(() => {
+    if (!idNegocioReal) return;
     const fetchEmpleados = async () => {
       try {
-        // Cambia la URL por la nueva ruta
         const response = await axios.get(
-          `http://localhost:5002/api/verEmpleados/${id_negocio}`
+          `http://localhost:5002/api/verEmpleados/${idNegocioReal}`
         );
         setEmpleados(response.data);
       } catch (err) {
         console.error("Error al cargar los empleados:", err);
       }
     };
-
     fetchEmpleados();
-  }, [id_negocio]);
+  }, [idNegocioReal]);
 
   const handleCrearEmpleado = async () => {
     try {
       await axios.post(`http://localhost:5002/api/crear-empleado`, {
         ...nuevoEmpleado,
-        pertenece_negocio: id_negocio,
+        pertenece_negocio: idNegocioReal,
       });
       setMostrarModalCrear(false);
       setNuevoEmpleado({
@@ -49,7 +72,7 @@ const Empleados = () => {
       });
       // Recargar empleados
       const response = await axios.get(
-        `http://localhost:5002/api/verEmpleados/${id_negocio}`
+        `http://localhost:5002/api/verEmpleados/${idNegocioReal}`
       );
       setEmpleados(response.data);
     } catch (err) {
@@ -58,7 +81,7 @@ const Empleados = () => {
     }
   };
 
-   const empleadosFiltrados = empleados.filter((empleado) => {
+  const empleadosFiltrados = empleados.filter((empleado) => {
     if (filtroEstado === "todos") return true;
     if (filtroEstado === "activo") return empleado.activo;
     if (filtroEstado === "inactivo") return !empleado.activo;
@@ -128,27 +151,32 @@ const Empleados = () => {
                 ) : (
                   <span className="text-red-600 font-semibold">Inactivo</span>
                 )}
-                </td>
+              </td>
               <td className="border border-gray-300 px-4 py-2">
-                <button
-                  className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-500"
-                  onClick={() => {
-                    setEmpleadoEditar(empleado);
-                    setMostrarModalEidtar(true);
-                  }}
-                >
-                  Editar
-                </button>
+                {/* Solo permitir editar si NO es administrador */}
+                {empleado.rol !== "administrador" && (
+                  <button
+                    className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-500"
+                    onClick={() => {
+                      setEmpleadoEditar(empleado);
+                      setMostrarModalEidtar(true);
+                    }}
+                  >
+                    Editar
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
-      </table>      
+      </table>
       {/* Modal para crear empleado */}
       {mostrarModalCrear && (
         <div className="fixed inset-0 flex justify-center items-center">
           <div className="bg-white p-5 rounded-lg shadow-lg w-96 overflow-y-auto border border-green-600">
             <h2 className="text-xl font-bold mb-4">Crear Empleado</h2>
+            {/* ...inputs para crear empleado... */}
+            {/* ...igual que tu código original... */}
             <div className="mb-4">
               <label className="block font-semibold mb-2">Nombre</label>
               <input
@@ -204,9 +232,9 @@ const Empleados = () => {
                   setNuevoEmpleado({ ...nuevoEmpleado, rol: e.target.value })
                 }
                 className="w-full p-2 border rounded-md"
+                disabled // <-- evita que el usuario cambie el rol
               >
                 <option value="empleado">Empleado</option>
-                <option value="administrador">Administrador</option>
               </select>
             </div>
             <div className="flex justify-end gap-4">
@@ -226,10 +254,13 @@ const Empleados = () => {
           </div>
         </div>
       )}
+      {/* Modal para editar empleado */}
       {mostrarModalEidtar && empleadoEditar && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-20">
           <div className="bg-white p-5 rounded-lg shadow-lg w-96 overflow-y-auto border border-green-600">
             <h2 className="text-xl font-bold mb-4">Editar Empleado</h2>
+            {/* ...inputs para editar empleado... */}
+            {/* ...igual que tu código original... */}
             <div className="mb-4">
               <label className="block font-semibold mb-2">Nombre</label>
               <input
@@ -334,7 +365,7 @@ const Empleados = () => {
                     setEmpleadoEditar(null);
                     // Recargar empleados
                     const response = await axios.get(
-                      `http://localhost:5002/api/verEmpleados/${id_negocio}`
+                      `http://localhost:5002/api/verEmpleados/${idNegocioReal}`
                     );
                     setEmpleados(response.data);
                   } catch (err) {

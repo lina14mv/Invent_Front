@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
+import Notiflix from "notiflix";
 
 const Ventas = () => {
   const [vista, setVista] = useState("ventas"); // "ventas" o "clientes"
@@ -218,7 +219,7 @@ const Ventas = () => {
       );
       setVentas(response.data);
     } catch (error) {
-      alert("Error al registrar la venta." + error.message);
+      ("Error al registrar la venta." + error.message);
       console.error(error);
     }
   };
@@ -373,7 +374,7 @@ const Ventas = () => {
       );
       setClientes(response.data);
     } catch (err) {
-      alert("Error al crear el cliente.");
+      Notiflix.Notify.failure("Error al crear el cliente.");
       console.error(err);
     }
   };
@@ -393,7 +394,7 @@ const Ventas = () => {
       setDetalleVenta({ ...venta, productos });
       setMostrarDetalleVenta(true);
     } catch (err) {
-      alert("Error al cargar detalles de la venta.");
+      Notiflix.Notify.failure("Error al cargar detalles de la venta.");
       console.error(err);
     }
   };
@@ -616,87 +617,92 @@ const Ventas = () => {
                     <th className="border px-2 py-1">Cantidad</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {productos.map((prod) => {
-                    const enVenta = productosVenta.find(
-                      (p) => p.id_producto === prod.id_producto
-                    );
-                    const cantidad = enVenta ? enVenta.cantidad : 1;
-                    return (
-                      <tr key={prod.id_producto}>
-                        <td className="border px-2 py-1">
-                          <img
-                            src={prod.imagen}
-                            alt={prod.nombre}
-                            className="w-12 h-12 object-cover"
-                          />
-                        </td>
-                        <td className="border px-2 py-1">{prod.nombre}</td>
-                        <td className="border px-2 py-1">
-                          ${prod.precio_venta}
-                        </td>
-                        <td className="border px-2 py-1 text-center">
-                          <button
-                            className="bg-gray-200 px-2 cursor-pointer rounded"
-                            onClick={() => {
-                              if (enVenta) {
-                                actualizarCantidad(
-                                  prod.id_producto,
-                                  Math.max(1, cantidad - 1)
-                                );
-                              } else {
-                                agregarProductoAVenta(prod);
-                              }
-                            }}
-                            disabled={enVenta && cantidad <= 1}
-                          >
-                            -
-                          </button>
-                          <input
-                            type="number"
-                            min="1"
-                            max={prod.stock}
-                            value={enVenta ? cantidad : ""}
-                            placeholder="0"
-                            onFocus={() => {
-                              if (!enVenta) agregarProductoAVenta(prod);
-                            }}
-                            onChange={(e) => {
-                              let val = parseInt(e.target.value) || 1;
-                              if (val > prod.stock) val = prod.stock;
-                              if (enVenta) {
-                                actualizarCantidad(prod.id_producto, val);
-                              } else {
-                                agregarProductoAVenta({
-                                  ...prod,
-                                  cantidad: val,
-                                });
-                              }
-                            }}
-                            className="w-16 border rounded p-1 text-center mx-2"
-                            style={{ width: "60px" }}
-                          />
-                          <button
-                            className="bg-gray-200 cursor-pointer px-2 rounded"
-                            onClick={() => {
-                              if (enVenta && cantidad < prod.stock) {
-                                actualizarCantidad(
-                                  prod.id_producto,
-                                  cantidad + 1
-                                );
-                              } else if (!enVenta) {
-                                agregarProductoAVenta(prod);
-                              }
-                            }}
-                            disabled={enVenta && cantidad >= prod.stock}
-                          >
-                            +
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
+<tbody>
+  {productos.map((prod) => {
+    const enVenta = productosVenta.find(
+      (p) => p.id_producto === prod.id_producto
+    );
+    const cantidad = enVenta ? enVenta.cantidad : 1;
+    const sinStock = prod.stock === 0;
+    return (
+      <tr key={prod.id_producto}>
+        <td className="border px-2 py-1">
+          <img
+            src={prod.imagen}
+            alt={prod.nombre}
+            className="w-12 h-12 object-cover"
+          />
+        </td>
+        <td className="border px-2 py-1">{prod.nombre}</td>
+        <td className="border px-2 py-1">
+          ${prod.precio_venta}
+        </td>
+        <td className="border px-2 py-1 text-center">
+          <button
+            className="bg-gray-200 px-2 cursor-pointer rounded"
+            onClick={() => {
+              if (enVenta) {
+                actualizarCantidad(
+                  prod.id_producto,
+                  Math.max(1, cantidad - 1)
+                );
+              } else {
+                agregarProductoAVenta(prod);
+              }
+            }}
+            disabled={enVenta && cantidad <= 1 || sinStock}
+          >
+            -
+          </button>
+          <input
+            type="number"
+            min="1"
+            max={prod.stock}
+            value={enVenta ? cantidad : ""}
+            placeholder={sinStock ? "0" : "1"}
+            disabled={sinStock}
+            onFocus={() => {
+              if (!enVenta && !sinStock) agregarProductoAVenta(prod);
+            }}
+            onChange={(e) => {
+              let val = parseInt(e.target.value) || 1;
+              if (val > prod.stock) val = prod.stock;
+              if (enVenta) {
+                actualizarCantidad(prod.id_producto, val);
+              } else if (!sinStock) {
+                agregarProductoAVenta({
+                  ...prod,
+                  cantidad: val,
+                });
+              }
+            }}
+            className="w-16 border rounded p-1 text-center mx-2"
+            style={{ width: "60px" }}
+          />
+          <button
+            className="bg-gray-200 cursor-pointer px-2 rounded"
+            onClick={() => {
+              if (enVenta && cantidad < prod.stock) {
+                actualizarCantidad(
+                  prod.id_producto,
+                  cantidad + 1
+                );
+              } else if (!enVenta && !sinStock) {
+                agregarProductoAVenta(prod);
+              }
+            }}
+            disabled={sinStock || (enVenta && cantidad >= prod.stock)}
+          >
+            +
+          </button>
+          {sinStock && (
+            <div className="text-xs text-red-500 mt-1">Sin stock</div>
+          )}
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
               </table>
             </div>
             {/* Productos seleccionados */}

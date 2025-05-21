@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Notiflix from 'notiflix';
 
 const CambioContrasena = ({ onSubmit }) => {
   const [password, setPassword] = useState('');
@@ -30,7 +31,7 @@ const CambioContrasena = ({ onSubmit }) => {
       );
 
       if (response.status === 200) {
-        alert('Contraseña cambiada con éxito');
+        Notiflix.Notify.success('Contraseña cambiada con éxito');
         onSubmit();
       }
     } catch (err) {

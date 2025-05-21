@@ -6,7 +6,8 @@ import Ventas from "../features/Empresa/Ventas";
 import Inventario from "../features/Empresa/Inventario";
 import Productos from "../features/Empresa/Productos";
 import Tickets from "../features/Empresa/Tickets";
-import { CerrarSesion } from "../components/CerrarSesion";
+import { CerrarSesion } from "../components/cerrarSesion";
+import Empleados from "../features/Empleado/Empleados";
 import {Route, Routes, Navigate} from "react-router-dom";
 import axios from "axios";
 
@@ -68,6 +69,8 @@ const EmpleadoPage = () => {
           <Route path="/inventario" element={<Inventario />} />
           <Route path="/productos" element={<Productos />} />
           <Route path="/tickets" element={<Tickets />} />
+          <Route path="/empleados" element={<Empleados />} />
+          {/* Redirección por defecto */}
         </Routes>
       </div>
     </section>

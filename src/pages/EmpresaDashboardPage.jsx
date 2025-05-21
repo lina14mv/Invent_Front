@@ -4,11 +4,10 @@ import Inicio from "../features/Empresa/Inicio";
 import Productos from "../features/Empresa/Productos";
 import Inventario from "../features/Empresa/Inventario";
 import Ventas from "../features/Empresa/Ventas";
-import Finanzas from "../features/empresa/Finanzas";
 import Tickets from "../features/Empresa/Tickets";
 import Configuracion from "../features/Empresa/Configuracion";
 import Empleados from "../features/Empresa/Empleados";
-import { CerrarSesion } from "../components/CerrarSesion";
+import { CerrarSesion } from "../components/cerrarSesion";
 import { useState } from "react";
 
 const EmpresaDashboardPage = () => {
@@ -38,7 +37,6 @@ const EmpresaDashboardPage = () => {
           <Route path="/productos" element={<Productos />} />
           <Route path="/inventario" element={<Inventario />} />
           <Route path="/ventas" element={<Ventas />} />
-          <Route path="/finanzas" element={<Finanzas />} />
           <Route path="/tickets" element={<Tickets />} />
           <Route path="/configuracion" element={<Configuracion />} />
           <Route path="/empleados" element={<Empleados />} />

@@ -4,6 +4,7 @@ import VerificarCodigo from '../features/auth/VerificarCodigo';
 import CambiarContrasena from '../features/auth/CambiarContrasena';
 import RecuperarContrasena from '../features/auth/RecuperarContrasena';
 import CodeVerificationChange from '../features/auth/codeVerificationChange';
+import Notiflix from 'notiflix';
 
 const LoginPage = () => {
   const [step, setStep] = useState('login'); // Estados: login, passwordRecovery, code, codeRecovery, changePassword
@@ -34,7 +35,7 @@ const LoginPage = () => {
 
   const handlePasswordSubmit = () => {
     console.log('Contraseña cambiada');
-    alert('Proceso completado');
+    Notiflix.Notify.success('Proceso completado');
     setStep('login'); // Volver al inicio de sesión después de cambiar la contraseña
   };
 

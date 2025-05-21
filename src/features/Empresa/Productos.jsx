@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Notiflix from "notiflix";
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
@@ -93,13 +94,15 @@ const Productos = () => {
   const handleAgregarProducto = async () => {
     // Obtener el ID del negocio desde el localStorage
     if (!idNegocioReal) {
-      alert("No se encontró el ID del negocio en el localStorage.");
+      Notiflix.Notify.failure(
+        "No se encontró el ID del negocio en el localStorage."
+      );
       return;
     }
 
     const imagenUrl = await subirImagenACloudinary();
     if (!imagenUrl) {
-      alert("Error al subir la imagen. Intenta nuevamente.");
+      Notiflix.Notify.failure("Error al subir la imagen. Intenta nuevamente.");
       return;
     }
 
@@ -127,18 +130,18 @@ const Productos = () => {
           imagen_url: "",
         });
         setImagen(null);
-        alert("Producto registrado exitosamente.");
+        Notiflix.Notify.success("Producto registrado exitosamente.");
       }
     } catch (err) {
       console.error("Error al registrar el producto:", err);
-      alert("Ocurrió un error al registrar el producto.");
+      Notiflix.Notify.failure("Ocurrió un error al registrar el producto.");
     }
   };
 
   const handleCopiarEnlace = () => {
     const url = `${window.location.origin}/Catalogo/${idNegocioReal}`;
     navigator.clipboard.writeText(url);
-    alert("¡Enlace del catálogo copiado al portapapeles!");
+    Notiflix.Notify.success("¡Enlace del catálogo copiado al portapapeles!");
   };
   const productosFiltrados = productos.filter((producto) => {
     const cumpleEstado = filtroEstado

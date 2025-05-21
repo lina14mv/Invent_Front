@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Notiflix from "notiflix";
 import axios from "axios";
 
 const Inventario = () => {
@@ -67,7 +68,7 @@ const Inventario = () => {
   const modificarStock = async (id_producto, operacion) => {
     const cantidad = cantidadModificar[id_producto];
     if (!cantidad || cantidad <= 0) {
-      alert("Ingrese una cantidad válida.");
+      Notiflix.Notify.failure("Ingrese una cantidad válida.");
       return;
     }
 
@@ -79,7 +80,7 @@ const Inventario = () => {
 
       const response = await axios.patch(endpoint, { cantidad });
 
-      alert(response.data.message);
+      Notiflix.Notify.success(response.data.message);
 
       // Actualizar el producto en el estado
       setProductos((prevProductos) =>
@@ -99,7 +100,7 @@ const Inventario = () => {
       setCantidadModificar({ ...cantidadModificar, [id_producto]: 0 });
     } catch (err) {
       console.error(`Error al ${operacion === "agregar" ? "aumentar" : "disminuir"} el stock:`, err);
-      alert(`Error al ${operacion === "agregar" ? "aumentar" : "disminuir"} el stock.`);
+      Notiflix.Notify.failure(`Error al ${operacion === "agregar" ? "aumentar" : "disminuir"} el stock.`);
     }
   };
 
@@ -112,7 +113,7 @@ const Inventario = () => {
         productoSeleccionado
       );
 
-      alert(response.data.message);
+    Notiflix.Notify.success(response.data.message);
 
       // Actualizar el producto en el estado
       setProductos((prevProductos) =>
@@ -127,7 +128,7 @@ const Inventario = () => {
       setMostrarModal(false);
     } catch (err) {
       console.error("Error al editar el producto:", err);
-      alert("Error al editar el producto.");
+      Notiflix.Notify.failure("Error al editar el producto.");
     }
   };
 

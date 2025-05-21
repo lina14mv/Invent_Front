@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Notiflix from "notiflix";
 
 const Tickets = () => {
   const [tickets, setTickets] = useState([]);
@@ -111,7 +112,7 @@ const [filtroPrioridad, setFiltroPrioridad] = useState("");
         }
       }
     } catch (err) {
-      alert("Error al crear el ticket.");
+      Notiflix.Notify.failure("Error al crear el ticket.");
       console.error(err);
     }
   };
