@@ -45,11 +45,6 @@ const Sidebar = ({ enviarAncho }) => {
                 href: "/Manage/usuarios",
                 icon: faUsersGear,
               },
-              {
-                label: "General",
-                href: "/Manage/operaciones",
-                icon: faWarehouse,
-              },
               { label: "Finanzas", href: "/Manage/finanzas", icon: faCoins },
               { label: "Soporte", href: "/Manage/soporte", icon: faTicket },
               {
