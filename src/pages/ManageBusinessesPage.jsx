@@ -29,7 +29,6 @@ const ManegePage = () => {
           <Route path="/usuarios" element={<Usuarios />}/>
           <Route path="/finanzas" element={<Finanzas />}/>
           <Route path="/soporte" element={<Soporte />}/>
-          <Route path="/configuracion" element={<Configuracion />}/>
         </Routes>
       </div>
     </section>

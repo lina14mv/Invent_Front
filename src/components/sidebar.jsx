@@ -47,11 +47,6 @@ const Sidebar = ({ enviarAncho }) => {
               },
               { label: "Finanzas", href: "/Manage/finanzas", icon: faCoins },
               { label: "Soporte", href: "/Manage/soporte", icon: faTicket },
-              {
-                label: "Ajustes",
-                href: "/Manage/configuracion",
-                icon: faGears,
-              },
             ].map((option) => (
               <Option
                 key={option.label}
