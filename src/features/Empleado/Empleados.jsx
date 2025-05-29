@@ -27,7 +27,7 @@ const Empleados = () => {
       if (tipo === "usuario") {
         try {
           const res = await axios.get(
-            `http://localhost:5002/api/usuario/${id_usuario}`
+            `http://3.144.253.195/api/usuario/${id_usuario}`
           );
           setIdNegocioReal(res.data.pertenece_negocio);
         } catch (err) {
@@ -46,7 +46,7 @@ const Empleados = () => {
     const fetchEmpleados = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5002/api/verEmpleados/${idNegocioReal}`
+          `http://3.144.253.195/api/verEmpleados/${idNegocioReal}`
         );
         setEmpleados(response.data);
       } catch (err) {
@@ -58,7 +58,7 @@ const Empleados = () => {
 
   const handleCrearEmpleado = async () => {
     try {
-      await axios.post(`http://localhost:5002/api/crear-empleado`, {
+      await axios.post(`http://3.144.253.195/api/crear-empleado`, {
         ...nuevoEmpleado,
         pertenece_negocio: idNegocioReal,
       });
@@ -72,7 +72,7 @@ const Empleados = () => {
       });
       // Recargar empleados
       const response = await axios.get(
-        `http://localhost:5002/api/verEmpleados/${idNegocioReal}`
+        `http://3.144.253.195/api/verEmpleados/${idNegocioReal}`
       );
       setEmpleados(response.data);
     } catch (err) {
@@ -358,14 +358,14 @@ const Empleados = () => {
                 onClick={async () => {
                   try {
                     await axios.put(
-                      `http://localhost:5002/api/editarEmpleado/${empleadoEditar.id_usuario}`,
+                      `http://3.144.253.195/api/editarEmpleado/${empleadoEditar.id_usuario}`,
                       empleadoEditar
                     );
                     setMostrarModalEidtar(false);
                     setEmpleadoEditar(null);
                     // Recargar empleados
                     const response = await axios.get(
-                      `http://localhost:5002/api/verEmpleados/${idNegocioReal}`
+                      `http://3.144.253.195/api/verEmpleados/${idNegocioReal}`
                     );
                     setEmpleados(response.data);
                   } catch (err) {

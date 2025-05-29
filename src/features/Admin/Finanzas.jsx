@@ -39,7 +39,7 @@ const Finanzas = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5002/api/grafica-membresias")
+      .get("http://3.144.253.195/api/grafica-membresias")
       .then((response) => {
         setGrafica(response.data);
         console.log("Grafica data:", response.data);
@@ -51,7 +51,7 @@ const Finanzas = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5002/api/negocios")
+      .get("http://3.144.253.195/api/negocios")
       .then((response) => {
         const filtrados = response.data.negocios.filter(
           (negocio) => negocio.activo === false
@@ -66,7 +66,7 @@ const Finanzas = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5002/api/ver-membresias")
+      .get("http://3.144.253.195/api/ver-membresias")
       .then((response) => {
         setMembresia(response.data.membresias);
         console.log("Membresia data:", response.data);
@@ -140,7 +140,7 @@ const Finanzas = () => {
     }
     if (title === "Renovar membresia") {
       try {
-        await axios.post("http://localhost:5002/api/renovar-membresia", {
+        await axios.post("http://3.144.253.195/api/renovar-membresia", {
          id_negocio: formData.id_empresa,
           meses: formData.meses,
         });
@@ -151,7 +151,7 @@ const Finanzas = () => {
           meses: "",
         });
         Notiflix.Notify.success("Pago registrado");
-        const response = await axios.get("http://localhost:5002/api/ver-membresias");
+        const response = await axios.get("http://3.144.253.195/api/ver-membresias");
         setMembresia(response.data.membresias);
       } catch (error) {
         console.error("Error al enviar los datos:", error);
@@ -160,7 +160,7 @@ const Finanzas = () => {
     }
     if (title === "Registrar pago") {
       try {
-        await axios.post("http://localhost:5002/api/crear-membresia", {
+        await axios.post("http://3.144.253.195/api/crear-membresia", {
           id_negocio: formData.id_empresa,
           meses: formData.meses,
         });
@@ -171,12 +171,12 @@ const Finanzas = () => {
           meses: "",
         });
         Notiflix.Notify.success("Pago registrado");
-        const response = await axios.get("http://localhost:5002/api/ver-membresias");
+        const response = await axios.get("http://3.144.253.195/api/ver-membresias");
         setMembresia(response.data.membresias);
         // Primero actualizar el campo activo en la base de datos
-        await axios.post("http://localhost:5002/api/actualizar-activo-negocios");
+        await axios.post("http://3.144.253.195/api/actualizar-activo-negocios");
         // Luego volver a consultar los negocios filtrados
-        const negociosResponse = await axios.get("http://localhost:5002/api/negocios");
+        const negociosResponse = await axios.get("http://3.144.253.195/api/negocios");
         const filtrados = negociosResponse.data.negocios.filter(
           (negocio) => negocio.activo === false
         );

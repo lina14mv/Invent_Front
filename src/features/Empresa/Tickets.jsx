@@ -24,7 +24,7 @@ const [filtroPrioridad, setFiltroPrioridad] = useState("");
       if (tipo === "usuario") {
         try {
           const res = await axios.get(
-            `http://localhost:5002/api/usuario/${id_usuario}`
+            `http://3.144.253.195/api/usuario/${id_usuario}`
           );
           setIdNegocioReal(res.data.pertenece_negocio);
         } catch (err) {
@@ -41,7 +41,7 @@ const [filtroPrioridad, setFiltroPrioridad] = useState("");
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await axios.get("http://localhost:5002/api/ver-tickets");
+        const response = await axios.get("http://3.144.253.195/api/ver-tickets");
         let ticketsFiltrados = [];
         if (response.data && Array.isArray(response.data.tickets)) {
           if (tipo === "negocio" || (tipo === "usuario" && rol === "administrador")) {
@@ -87,7 +87,7 @@ const [filtroPrioridad, setFiltroPrioridad] = useState("");
               descripcion: nuevoTicket.descripcion,
             };
             const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5002/api/crear-tickets", payload,{
+      await axios.post("http://3.144.253.195/api/crear-tickets", payload,{
          headers: {
         Authorization: `Bearer ${token}`, 
       },
@@ -101,7 +101,7 @@ const [filtroPrioridad, setFiltroPrioridad] = useState("");
       // Refrescar tickets
       // Espera a que idNegocioReal esté definido
       if (idNegocioReal) {
-        const response = await axios.get("http://localhost:5002/api/ver-tickets");
+        const response = await axios.get("http://3.144.253.195/api/ver-tickets");
         let ticketsFiltrados = [];
         if (response.data && Array.isArray(response.data.tickets)) {
           if (tipo === "negocio" || (tipo === "usuario" && rol === "administrador")) {

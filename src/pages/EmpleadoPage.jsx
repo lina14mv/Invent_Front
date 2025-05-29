@@ -26,7 +26,7 @@ const EmpleadoPage = () => {
 
     axios
       .post(
-        "http://localhost:5002/api/colores-negocio",
+        "http://3.144.253.195/api/colores-negocio",
         { correo: correo, tipo: tipo },
         {
           headers: {

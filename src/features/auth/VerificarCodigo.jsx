@@ -10,7 +10,7 @@ const VerificarCodigo = ({ onSubmit }) => {
     try {
       const correo = localStorage.getItem("correo");
       const response = await axios.post(
-        "http://localhost:5002/api/validar-codigo",
+        "http://3.144.253.195/api/validar-codigo",
         {
           correo: correo,
           codigoSesion: code,

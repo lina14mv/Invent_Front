@@ -10,8 +10,8 @@ const IniciarSesion = ({ onSubmit, onPasswordRecovery }) => {
     e.preventDefault();
     try {
       // Llama a la ruta de actualizar activo antes de hacer login
-    axios.post('http://localhost:5002/api/actualizar-activo-negocios');
-      const response = await axios.post('http://localhost:5002/api/login', {
+    axios.post('http://3.144.253.195/api/actualizar-activo-negocios');
+      const response = await axios.post('http://3.144.253.195/api/login', {
         correo: email,
         contraseña: password,
       });

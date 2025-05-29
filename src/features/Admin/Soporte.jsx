@@ -10,7 +10,7 @@ const Soporte = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5002/api/ver-tickets")
+      .get("http://3.144.253.195/api/ver-tickets")
       .then((response) => {
         setTask(response.data.tickets);
       })
@@ -47,7 +47,7 @@ const Soporte = () => {
     });
 
     if (item) {
-      axios.put("http://localhost:5002/api/actualizar-ticket", {
+      axios.put("http://3.144.253.195/api/actualizar-ticket", {
         id_ticket: item.id_ticket,
         nuevo_estado: estado,
       });

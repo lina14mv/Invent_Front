@@ -71,7 +71,7 @@ const Configuracion = () => {
   useEffect(() => {
     const fetchEmpresa = async () => {
       try {
-        const response = await axios.get("http://localhost:5002/api/negocios");
+        const response = await axios.get("http://3.144.253.195/api/negocios");
         const negocios = Array.isArray(response.data)
           ? response.data
           : response.data.negocios;
@@ -116,7 +116,7 @@ const Configuracion = () => {
     }
     try {
       await axios.put(
-        `http://localhost:5002/api/${empresa.id}/editarE`,
+        `http://3.144.253.195/api/${empresa.id}/editarE`,
         empresa
       );
       setMensaje("Los datos de la empresa se han actualizado correctamente.");

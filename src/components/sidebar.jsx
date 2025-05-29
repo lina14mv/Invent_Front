@@ -3,6 +3,7 @@ import {
   faBuildingUser,
   faCoins,
   faGears,
+  faHandPointUp,
   faTicket,
   faUsersGear,
   faWarehouse,
@@ -19,57 +20,69 @@ const Sidebar = ({ enviarAncho }) => {
 
   return (
     <>
-      {isOpen ? 
-        (
-        enviarAncho("64"),
-        <div className="w-64 bg-green-100 flex flex-col fixed h-screen">
-          <Boton onClick={() => setIsOpen(!isOpen)}>
-            <FontAwesomeIcon icon={faBars} className="text-green-600 absolute right-4 top-4" />
-          </Boton>
-          <Link
-            className="font-bold text-4xl justify-center text-center py-10"
-            to="/Manage"
-            onClick={() => setSelectedOption("null")}
-          >
-            INVENT<span className="text-green-600 animate-pulse">+</span>+
-          </Link>
-          <div className="flex flex-col items-center justify-center mt-4">
-            {[
-              {
-                label: "Empresas",
-                href: "/Manage/empresas",
-                icon: faBuildingUser,
-              },
-              {
-                label: "Usuarios",
-                href: "/Manage/usuarios",
-                icon: faUsersGear,
-              },
-              { label: "Finanzas", href: "/Manage/finanzas", icon: faCoins },
-              { label: "Soporte", href: "/Manage/soporte", icon: faTicket },
-            ].map((option) => (
-              <Option
-                key={option.label}
-                className={`${option.label === "Empresas" ? "border-t" : ""} ${
-                  selectedOption === option.label ? "bg-green-300" : ""
-                }`}
-                onClick={() => setSelectedOption(option.label)}
-                href={option.href}
-                icon={option.icon}
+      {isOpen
+        ? (enviarAncho("64"),
+          (
+            <div className="w-64 bg-green-100 flex flex-col fixed h-screen">
+              <Boton onClick={() => setIsOpen(!isOpen)}>
+                <FontAwesomeIcon
+                  icon={faBars}
+                  className="text-green-600 absolute right-4 top-4"
+                />
+              </Boton>
+              <Link
+                className="font-bold text-4xl justify-center text-center py-10"
+                to="/Manage"
+                onClick={() => setSelectedOption("null")}
               >
-                {option.label}
-              </Option>
-            ))}
-          </div>
-        </div>
-      ) : (
-        enviarAncho("14"),
-        <div className="flex flex-col w-14 h-screen pt-10 fixed">
-          <Boton onClick={() => setIsOpen(!isOpen)}>
-            <FontAwesomeIcon icon={faBars} className="text-green-600 absolute right-4 top-8" />
-          </Boton>
-        </div>
-      )}
+                INVENT<span className="text-green-600 animate-pulse">+</span>+
+              </Link>
+              <div className="flex flex-col items-center justify-center mt-4">
+                {[
+                  {
+                    label: "Empresas",
+                    href: "/Manage/empresas",
+                    icon: faBuildingUser,
+                  },
+                  {
+                    label: "Usuarios",
+                    href: "/Manage/usuarios",
+                    icon: faUsersGear,
+                  },
+                  {
+                    label: "Finanzas",
+                    href: "/Manage/finanzas",
+                    icon: faCoins,
+                  },
+                  { label: "Soporte", href: "/Manage/soporte", icon: faTicket },
+                  { label: "Solicitud", href: "/Manage/solicitudes", icon: faHandPointUp },
+                ].map((option) => (
+                  <Option
+                    key={option.label}
+                    className={`${
+                      option.label === "Empresas" ? "border-t" : ""
+                    } ${selectedOption === option.label ? "bg-green-300" : ""}`}
+                    onClick={() => setSelectedOption(option.label)}
+                    href={option.href}
+                    icon={option.icon}
+                  >
+                    {option.label}
+                  </Option>
+                ))}
+              </div>
+            </div>
+          ))
+        : (enviarAncho("14"),
+          (
+            <div className="flex flex-col w-14 h-screen pt-10 fixed">
+              <Boton onClick={() => setIsOpen(!isOpen)}>
+                <FontAwesomeIcon
+                  icon={faBars}
+                  className="text-green-600 absolute right-4 top-8"
+                />
+              </Boton>
+            </div>
+          ))}
     </>
   );
 };

@@ -40,7 +40,7 @@ const Ventas = () => {
       if (tipo === "usuario") {
         try {
           const res = await axios.get(
-            `http://localhost:5002/api/usuario/${id_usuario}`
+            `http://3.144.253.195/api/usuario/${id_usuario}`
           );
           // Ajusta el campo según tu backend, por ejemplo: pertenece_negocio
           setIdNegocioReal(res.data.pertenece_negocio);
@@ -60,7 +60,7 @@ const Ventas = () => {
     const fetchVentas = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5002/api/ventas/${idNegocioReal}`
+          `http://3.144.253.195/api/ventas/${idNegocioReal}`
         );
         setVentas(response.data);
       } catch (err) {
@@ -71,7 +71,7 @@ const Ventas = () => {
     const fetchClientes = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5002/api/clientes/${idNegocioReal}`
+          `http://3.144.253.195/api/clientes/${idNegocioReal}`
         );
         setClientes(response.data);
         console.log("Clientes:", response.data);
@@ -83,7 +83,7 @@ const Ventas = () => {
     const fetchProductos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5002/api/productos/${idNegocioReal}`
+          `http://3.144.253.195/api/productos/${idNegocioReal}`
         );
         // Si la respuesta es un objeto con la propiedad productos:
         setProductos(response.data.productos || []); // <-- Cambia esto
@@ -183,7 +183,7 @@ const Ventas = () => {
   const handleRealizarVenta = async () => {
     if (!nuevaVenta.cliente_id || productosVenta.length === 0) return;
     try {
-      await axios.post("http://localhost:5002/api/crear-venta", {
+      await axios.post("http://3.144.253.195/api/crear-venta", {
         id_negocio: idNegocioReal,
         empleado_id: id_usuario,
         cliente_id: nuevaVenta.cliente_id,
@@ -215,7 +215,7 @@ const Ventas = () => {
       setNuevaVenta({ cliente_id: "" });
       // Recargar ventas
       const response = await axios.get(
-        `http://localhost:5002/api/ventas/${idNegocioReal}`
+        `http://3.144.253.195/api/ventas/${idNegocioReal}`
       );
       setVentas(response.data);
     } catch (error) {
@@ -227,7 +227,7 @@ const Ventas = () => {
   const generarPDFVenta = async (venta, productosVenta, cliente, id_negocio) => {
     try {
       const response = await axios.get(
-        `http://localhost:5002/api/negocio/${id_negocio}`
+        `http://3.144.253.195/api/negocio/${id_negocio}`
       );
       const empresa = response.data;
       const nombreEmpresa = empresa.nombre || "Nombre de la Empresa";
@@ -355,7 +355,7 @@ const Ventas = () => {
   // Crear cliente
   const handleCrearCliente = async () => {
     try {
-      await axios.post("http://localhost:5002/api/crear-cliente", {
+      await axios.post("http://3.144.253.195/api/crear-cliente", {
         ...nuevoCliente,
         id: tipo === "negocio" ? idNegocioReal : id_usuario,
         tipo,
@@ -370,7 +370,7 @@ const Ventas = () => {
       });
       // Recargar clientes
       const response = await axios.get(
-        `http://localhost:5002/api/clientes/${idNegocioReal}`
+        `http://3.144.253.195/api/clientes/${idNegocioReal}`
       );
       setClientes(response.data);
     } catch (err) {
@@ -383,7 +383,7 @@ const Ventas = () => {
   const verDetalleVenta = async (venta) => {
     try {
       const response = await axios.get(
-        `http://localhost:5002/api/detalle-venta/${venta.id_venta}`
+        `http://3.144.253.195/api/detalle-venta/${venta.id_venta}`
       );
 
       // Ajuste según respuesta del backend

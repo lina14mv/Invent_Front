@@ -15,7 +15,7 @@ const Usuarios = () => {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get("http://localhost:5002/api/por-negocio");
+        const response = await axios.get("http://3.144.253.195/api/por-negocio");
         setNegocios(response.data); // Guardar todos los negocios
         const todosUsuarios = response.data.flatMap((negocio) => negocio.usuarios); // Combinar todos los usuarios
         setUsuarios(todosUsuarios);

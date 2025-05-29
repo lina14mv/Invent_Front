@@ -22,7 +22,7 @@ const Empleados = () => {
       try {
         // Cambia la URL por la nueva ruta
         const response = await axios.get(
-          `http://localhost:5002/api/verEmpleados/${id_negocio}`
+          `http://3.144.253.195/api/verEmpleados/${id_negocio}`
         );
         setEmpleados(response.data);
       } catch (err) {
@@ -35,7 +35,7 @@ const Empleados = () => {
 
   const handleCrearEmpleado = async () => {
     try {
-      await axios.post(`http://localhost:5002/api/crear-empleado`, {
+      await axios.post(`http://3.144.253.195/api/crear-empleado`, {
         ...nuevoEmpleado,
         pertenece_negocio: id_negocio,
       });
@@ -49,7 +49,7 @@ const Empleados = () => {
       });
       // Recargar empleados
       const response = await axios.get(
-        `http://localhost:5002/api/verEmpleados/${id_negocio}`
+        `http://3.144.253.195/api/verEmpleados/${id_negocio}`
       );
       setEmpleados(response.data);
     } catch (err) {
@@ -327,14 +327,14 @@ const Empleados = () => {
                 onClick={async () => {
                   try {
                     await axios.put(
-                      `http://localhost:5002/api/editarEmpleado/${empleadoEditar.id_usuario}`,
+                      `http://3.144.253.195/api/editarEmpleado/${empleadoEditar.id_usuario}`,
                       empleadoEditar
                     );
                     setMostrarModalEidtar(false);
                     setEmpleadoEditar(null);
                     // Recargar empleados
                     const response = await axios.get(
-                      `http://localhost:5002/api/verEmpleados/${id_negocio}`
+                      `http://3.144.253.195/api/verEmpleados/${id_negocio}`
                     );
                     setEmpleados(response.data);
                   } catch (err) {

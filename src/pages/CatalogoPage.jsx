@@ -18,7 +18,7 @@ const CatalogoPage = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:5002/api/productos/${id_negocio}`
+          `http://3.144.253.195/api/productos/${id_negocio}`
         );
         setEmpresa(response.data.nombre);
         setLogo(response.data.imagen);

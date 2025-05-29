@@ -27,7 +27,7 @@ const Productos = () => {
       if (tipo === "usuario") {
         try {
           const res = await axios.get(
-            `http://localhost:5002/api/usuario/${id_usuario}`
+            `http://3.144.253.195/api/usuario/${id_usuario}`
           );
           // Ajusta el campo según tu backend, por ejemplo: pertenece_negocio
           setIdNegocioReal(res.data.pertenece_negocio);
@@ -46,8 +46,8 @@ const Productos = () => {
     const fetchProductos = async () => {
       try {
         const response = await axios.get(
-          //'http://localhost:5002/api/productos/1',
-          `http://localhost:5002/api/productos/${idNegocioReal}` // Usar el ID en la ruta
+          //'http://3.144.253.195/api/productos/1',
+          `http://3.144.253.195/api/productos/${idNegocioReal}` // Usar el ID en la ruta
         );
 
         // Extraer el array de productos de la respuesta
@@ -114,7 +114,7 @@ const Productos = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5002/api/registrarProductos",
+        "http://3.144.253.195/api/registrarProductos",
         productoData
       );
       if (response.status === 201) {

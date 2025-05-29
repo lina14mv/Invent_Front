@@ -40,7 +40,7 @@ const Empresas = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5002/api/negocios")
+      .get("http://3.144.253.195/api/negocios")
       .then((response) => {
         console.log("res ", response.data.negocios);
         setEmpresas(response.data.negocios);
@@ -182,12 +182,12 @@ const Empresas = () => {
     try {
       if (editingEmpresaId) {
         await axios.put(
-          `http://localhost:5002/api/${editingEmpresaId}/editarE`,
+          `http://3.144.253.195/api/${editingEmpresaId}/editarE`,
           form
         );
         Notiflix.Notify.success("Empresa actualizada!");
       } else {
-        await axios.post("http://localhost:5002/negocios/registrar", form);
+        await axios.post("http://3.144.253.195/negocios/registrar", form);
         Notiflix.Notify.success("Empresa registrada!");
       }
 
@@ -206,7 +206,7 @@ const Empresas = () => {
         cedula_dueno: "",
       });
 
-      const response = await axios.get("http://localhost:5002/api/negocios");
+      const response = await axios.get("http://3.144.253.195/api/negocios");
       setEmpresas(response.data.negocios);
     } catch (error) {
       console.error(error);
@@ -264,9 +264,9 @@ const Empresas = () => {
       "No",
       async () => {
         try {
-          await axios.put(`http://localhost:5002/api/${empresa}/desactivarN`);
+          await axios.put(`http://3.144.253.195/api/${empresa}/desactivarN`);
           Notiflix.Notify.success("Empresa eliminada!");
-          const response = await axios.get("http://localhost:5002/api/negocios");
+          const response = await axios.get("http://3.144.253.195/api/negocios");
           setEmpresas(response.data.negocios);
         } catch (error) {
           console.error(error);
@@ -286,9 +286,9 @@ const Empresas = () => {
       "No",
       async () => {
         try {
-          await axios.put(`http://localhost:5002/api/${empresa}/activarN`);
+          await axios.put(`http://3.144.253.195/api/${empresa}/activarN`);
           Notiflix.Notify.success("Empresa activada!");
-          const response = await axios.get("http://localhost:5002/api/negocios");
+          const response = await axios.get("http://3.144.253.195/api/negocios");
           setEmpresas(response.data.negocios);
         } catch (error) {
           console.error(error);

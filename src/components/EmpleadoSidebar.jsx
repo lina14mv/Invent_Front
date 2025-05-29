@@ -29,7 +29,7 @@ export const EmpleadoSidebar = ({ enviarAncho }) => {
       if (tipo === "usuario") {
         try {
           const res = await axios.get(
-            `http://localhost:5002/api/usuario/${id_usuario}`
+            `http://3.144.253.195/api/usuario/${id_usuario}`
           );
           // Ajusta el campo según tu backend, por ejemplo: pertenece_negocio
           setIdNegocioReal(res.data.pertenece_negocio);
@@ -47,7 +47,7 @@ export const EmpleadoSidebar = ({ enviarAncho }) => {
     const nombreNegocio = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5002/api/negocio/${idNegocioReal}`
+          `http://3.144.253.195/api/negocio/${idNegocioReal}`
         );
         setNombre(res.data.nombre);
       } catch (err) {

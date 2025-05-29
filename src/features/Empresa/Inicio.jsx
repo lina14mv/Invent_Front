@@ -38,7 +38,7 @@ const Inicio = () => {
     const obtenerIdNegocio = async () => {
       if (tipo === "usuario") {
         try {
-          const res = await axios.get(`http://localhost:5002/api/usuario/${id_usuario}`);
+          const res = await axios.get(`http://3.144.253.195/api/usuario/${id_usuario}`);
           setIdNegocioReal(res.data.pertenece_negocio);
         } catch (err) {
           setIdNegocioReal(id_negocio_local);
@@ -55,7 +55,7 @@ const Inicio = () => {
     if (!idNegocioReal) return;
     const fetchFinanzas = async () => {
       try {
-        const res = await axios.get(`http://localhost:5002/api/finanzas/${idNegocioReal}`);
+        const res = await axios.get(`http://3.144.253.195/api/finanzas/${idNegocioReal}`);
         // Resumen
         setResumen({
           totalVentas: res.data.total_ventas_mes || 0,

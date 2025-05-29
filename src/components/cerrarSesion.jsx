@@ -12,7 +12,7 @@ export const CerrarSesion = () => {
         tipo: localStorage.getItem("tipo"), // ejemplo de cómo obtener el token
       };
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5002/api/cerrarSesion", datos, {
+      await axios.post("http://3.144.253.195/api/cerrarSesion", datos, {
         withCredentials: true,
         headers: {
         Authorization: `Bearer ${token}`,

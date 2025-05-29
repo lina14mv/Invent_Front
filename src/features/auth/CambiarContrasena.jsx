@@ -25,7 +25,7 @@ const CambioContrasena = ({ onSubmit }) => {
       const correo = localStorage.getItem('correo');
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        'http://localhost:5002/api/cambiar-contrasena',
+        'http://3.144.253.195/api/cambiar-contrasena',
         { correo, nuevaContrasena: password },
         { headers: { Authorization: `Bearer ${token}` } }
       );

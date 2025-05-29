@@ -17,7 +17,7 @@ const Inicio = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5002/api/consultaInicial")
+      .get("http://3.144.253.195/api/consultaInicial")
       .then((response) => {
         console.log("Datos recibidos:", response.data);
         setData(response.data);

@@ -7,6 +7,7 @@ import Soporte from "../features/Admin/Soporte";
 import Configuracion from "../features/Admin/Configuracion";
 import Sidebar from "../components/sidebar";
 import { useState } from "react";
+import { Solicitud } from "../features/Admin/Solicitud";
 
 
 const ManegePage = () => {
@@ -29,6 +30,7 @@ const ManegePage = () => {
           <Route path="/usuarios" element={<Usuarios />}/>
           <Route path="/finanzas" element={<Finanzas />}/>
           <Route path="/soporte" element={<Soporte />}/>
+          <Route path="/solicitudes" element={<Solicitud />}/>
         </Routes>
       </div>
     </section>

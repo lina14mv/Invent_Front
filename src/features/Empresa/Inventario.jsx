@@ -20,7 +20,7 @@ const Inventario = () => {
         if (tipo === "usuario") {
           try {
             const res = await axios.get(
-              `http://localhost:5002/api/usuario/${id_usuario}`
+              `http://3.144.253.195/api/usuario/${id_usuario}`
             );
             // Ajusta el campo según tu backend, por ejemplo: pertenece_negocio
             setIdNegocioReal(res.data.pertenece_negocio);
@@ -39,8 +39,8 @@ const Inventario = () => {
     const fetchProductos = async () => {
       try {
         const response = await axios.get(
-          //'http://localhost:5002/api/productos/1',
-          `http://localhost:5002/api/productos/${idNegocioReal}` // Usar el ID en la ruta
+          //'http://3.144.253.195/api/productos/1',
+          `http://3.144.253.195/api/productos/${idNegocioReal}` // Usar el ID en la ruta
         );
 
         // Extraer el array de productos de la respuesta
@@ -75,8 +75,8 @@ const Inventario = () => {
     try {
       const endpoint =
         operacion === "agregar"
-          ? `http://localhost:5002/api/productos/${id_producto}/aumentar`
-          : `http://localhost:5002/api/productos/${id_producto}/disminuir`;
+          ? `http://3.144.253.195/api/productos/${id_producto}/aumentar`
+          : `http://3.144.253.195/api/productos/${id_producto}/disminuir`;
 
       const response = await axios.patch(endpoint, { cantidad });
 
@@ -109,7 +109,7 @@ const Inventario = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5002/api/productos/${productoSeleccionado.id_producto}`,
+        `http://3.144.253.195/api/productos/${productoSeleccionado.id_producto}`,
         productoSeleccionado
       );
 

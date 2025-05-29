@@ -21,7 +21,7 @@ const Formulario = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5002/api/paraContactar", {
+      const response = await fetch("http://3.144.253.195/api/paraContactar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
