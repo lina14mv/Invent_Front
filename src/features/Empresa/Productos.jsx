@@ -139,14 +139,16 @@ const Productos = () => {
   };
 
   const handleCopiarEnlace = () => {
-    const isProduction = window.location.hostname === "d2oip7dtxebx8q.cloudfront.net";
-    const dominio = isProduction
-      ? "http://d2oip7dtxebx8q.cloudfront.net"
-      : window.location.origin; 
-    const url = `${dominio}/Catalogo/${idNegocioReal}`;
-    navigator.clipboard.writeText(url);
-    Notiflix.Notify.success("¡Enlace del catálogo copiado al portapapeles!");
-  };
+  if (!idNegocioReal) {
+    Notiflix.Notify.failure("No se encontró el ID del negocio.");
+    return;
+  }
+  // Siempre usar tu dominio de AWS con http
+  const dominio = "http://d2oip7dtxebx8q.cloudfront.net";
+  const url = `${dominio}/Catalogo/${idNegocioReal}`;
+  navigator.clipboard.writeText(url);
+  Notiflix.Notify.success("¡Enlace del catálogo copiado al portapapeles!");
+};
   const productosFiltrados = productos.filter((producto) => {
     const cumpleEstado = filtroEstado
       ? producto.disponibilidad === filtroEstado
