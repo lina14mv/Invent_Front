@@ -139,7 +139,11 @@ const Productos = () => {
   };
 
   const handleCopiarEnlace = () => {
-    const url = `${window.location.origin}/Catalogo/${idNegocioReal}`;
+    const isProduction = window.location.hostname === "d2oip7dtxebx8q.cloudfront.net";
+    const dominio = isProduction
+      ? "http://d2oip7dtxebx8q.cloudfront.net"
+      : window.location.origin; 
+    const url = `${dominio}/Catalogo/${idNegocioReal}`;
     navigator.clipboard.writeText(url);
     Notiflix.Notify.success("¡Enlace del catálogo copiado al portapapeles!");
   };
@@ -155,7 +159,7 @@ const Productos = () => {
       <div className="flex justify-between items-center mb-5">
         <h1 className="text-2xl font-bold">Gestión de Productos</h1>
         <button
-          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500"
+          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500 mouse-pointer"
           onClick={() => setMostrarModal(true)}
         >
           Agregar Producto
@@ -165,13 +169,13 @@ const Productos = () => {
           href={`/Catalogo/${idNegocioReal}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500 flex items-center justify-center"
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500 flex items-center justify-center mouse-pointer"
         >
           Ver Catálogo
         </a>
 
         <button
-          className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500"
+          className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 mouse-pointer"
           onClick={handleCopiarEnlace}
         >
           Compartir enlace catálogo
