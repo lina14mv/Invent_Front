@@ -6,6 +6,8 @@ const Productos = () => {
   const [productos, setProductos] = useState([]);
   const [filtroEstado, setFiltroEstado] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [mostrarEnlace, setMostrarEnlace] = useState(false);
+  const [enlaceCatalogo, setEnlaceCatalogo] = useState("");
   const [nuevoProducto, setNuevoProducto] = useState({
     nombre: "",
     descripcion: "",
@@ -139,26 +141,30 @@ const Productos = () => {
   };
 
   const handleCopiarEnlace = () => {
-  if (!idNegocioReal) {
-    Notiflix.Notify.failure("No se encontró el ID del negocio.");
-    return;
-  }
-  const dominio = "http://d2oip7dtxebx8q.cloudfront.net";
-  const url = `${dominio}/Catalogo/${idNegocioReal}`;
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(url)
-      .then(() => {
-        Notiflix.Notify.success("¡Enlace del catálogo copiado al portapapeles!");
-      })
-      .catch(() => {
-        Notiflix.Notify.failure("No se pudo copiar automáticamente. Copia el enlace manualmente:\n" + url);
-      });
-  } else {
-    // Fallback para navegadores inseguros o sin soporte
-    Notiflix.Notify.info("Copia el enlace manualmente:\n" + url);
-    window.prompt("Copia el enlace del catálogo:", url);
-  }
-};
+    if (!idNegocioReal) {
+      Notiflix.Notify.failure("No se encontró el ID del negocio.");
+      return;
+    }
+    const dominio = "http://d2oip7dtxebx8q.cloudfront.net";
+    const url = `${dominio}/Catalogo/${idNegocioReal}`;
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard
+        .writeText(url)
+        .then(() => {
+          Notiflix.Notify.success(
+            "¡Enlace del catálogo copiado al portapapeles!"
+          );
+        })
+        .catch(() => {
+          setEnlaceCatalogo(url);
+          setMostrarEnlace(true);
+        });
+    } else {
+      setEnlaceCatalogo(url);
+      setMostrarEnlace(true);
+    }
+  };
+
   const productosFiltrados = productos.filter((producto) => {
     const cumpleEstado = filtroEstado
       ? producto.disponibilidad === filtroEstado
@@ -361,6 +367,29 @@ const Productos = () => {
                 disabled={subiendoImagen}
               >
                 {subiendoImagen ? "Subiendo..." : "Guardar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Modal para mostrar enlace del catálogo */}
+      {mostrarEnlace && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-lg font-bold mb-4">Enlace del catálogo</h2>
+            <input
+              type="text"
+              value={enlaceCatalogo}
+              readOnly
+              className="w-full p-2 border rounded mb-4"
+              onFocus={(e) => e.target.select()}
+            />
+            <div className="flex justify-end">
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500"
+                onClick={() => setMostrarEnlace(false)}
+              >
+                Cerrar
               </button>
             </div>
           </div>
