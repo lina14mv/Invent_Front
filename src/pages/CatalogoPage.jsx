@@ -74,7 +74,7 @@ const CatalogoPage = () => {
                 <img
                   src={producto.imagen}
                   alt={producto.nombre}
-                  className="w-full h-32 object-cover"
+                  className="w-full h-32 object-contain"
                 />
                 <span className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full font-semibold">
                   Disponible
