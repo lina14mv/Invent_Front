@@ -143,11 +143,21 @@ const Productos = () => {
     Notiflix.Notify.failure("No se encontró el ID del negocio.");
     return;
   }
-  // Siempre usar tu dominio de AWS con http
   const dominio = "http://d2oip7dtxebx8q.cloudfront.net";
   const url = `${dominio}/Catalogo/${idNegocioReal}`;
-  navigator.clipboard.writeText(url);
-  Notiflix.Notify.success("¡Enlace del catálogo copiado al portapapeles!");
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        Notiflix.Notify.success("¡Enlace del catálogo copiado al portapapeles!");
+      })
+      .catch(() => {
+        Notiflix.Notify.failure("No se pudo copiar automáticamente. Copia el enlace manualmente:\n" + url);
+      });
+  } else {
+    // Fallback para navegadores inseguros o sin soporte
+    Notiflix.Notify.info("Copia el enlace manualmente:\n" + url);
+    window.prompt("Copia el enlace del catálogo:", url);
+  }
 };
   const productosFiltrados = productos.filter((producto) => {
     const cumpleEstado = filtroEstado
@@ -161,7 +171,7 @@ const Productos = () => {
       <div className="flex justify-between items-center mb-5">
         <h1 className="text-2xl font-bold">Gestión de Productos</h1>
         <button
-          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500 mouse-pointer"
+          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-500 cursor-pointer"
           onClick={() => setMostrarModal(true)}
         >
           Agregar Producto
@@ -177,7 +187,7 @@ const Productos = () => {
         </a>
 
         <button
-          className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 mouse-pointer"
+          className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 cursor-pointer"
           onClick={handleCopiarEnlace}
         >
           Compartir enlace catálogo
