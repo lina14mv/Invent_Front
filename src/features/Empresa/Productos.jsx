@@ -108,7 +108,7 @@ const Productos = () => {
 
     const productoData = {
       ...nuevoProducto,
-      idNegocioReal: parseInt(idNegocioReal),
+      id_negocio: parseInt(idNegocioReal),
       imagen_url: imagenUrl,
     };
 
