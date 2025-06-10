@@ -374,7 +374,7 @@ const Productos = () => {
       )}
       {/* Modal para mostrar enlace del catálogo */}
       {mostrarEnlace && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+        <div className="fixed inset-0 flex items-center justify-center z-50 ">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-lg font-bold mb-4">Enlace del catálogo</h2>
             <input
